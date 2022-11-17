@@ -23,36 +23,38 @@ SemicolSep<T>: Vec<T> = {
     }
 };
 
-QuotedStr: String = "\"" <s:r""> "\"" => s;
+TextStr: String = <s:r"[a-zA-Z0-9,. ]*"> => s.to_string();
 
-Num: i32 = <s:r"[0-9]+"> => i32::from_str(s).unwrap();
+QuotedStr: String = "\"" <s:TextStr> "\"" => s;
+
+Num: i32 = <s:TextStr> => i32::from_str(&s).unwrap();
 
 Comment: String = {
     <c:r"//[A-Za-z0-9., ]+"> => c.to_string(),
 }
 
 VarVal: VarVal = {
-    <s:r"[a-z_]+"> => Var::String(s)
-    <n:Num> => Var::Int(n)
-    <l:CommaSep<Num>> => Var::List(l)
+    <s:QuotedStr> => VarVal::String(s),
+    <n:Num> => VarVal::Int(n),
+    "list(" <l:CommaSep<Num>> ")" => VarVal::List(l),
 }
 
 Var: Var = {
-    <n:QuotedStr> " = " <v:VarVal> => Var { name: n, val: v }
-
+    <n:TextStr> " = " <v:VarVal> => Var { name: n, val: v }
 }
 
 Atom: Atom = {
-    <p:QuotedStr> <v:SemicolSep<Var>> => Atom { path: p.to_string(), vars: v }
+    <p:TextStr> => Atom { path: p.to_string(), vars: vec![] },
+    <p:TextStr> "{" <v:SemicolSep<Var>> "}" => Atom { path: p.to_string(), vars: v },
 }
 
 Prototype: Prototype = {
-    "\"" <id:r"[a-zA-Z]+"> "\" = (" <a:CommaSep<Atom>> ")"
+    <id:QuotedStr> " = (" <a:CommaSep<Atom>> ")"
     => Prototype { id: id.to_string(), atoms: a}
 }
 
 Row: Row = {
-    "(" <c:CommaSep<Num>> ")" "=" "{\"" <t:r"[a-zA-Z]+"*> "\"}"
+    "(" <c:CommaSep<Num>> ")" "=" "{\"" <t:TextStr*> "\"}"
     => Row { coords: c, tiles: t.iter().map(|s| s.to_string()).collect(), },
 }
 
