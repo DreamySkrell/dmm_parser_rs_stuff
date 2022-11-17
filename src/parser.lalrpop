@@ -27,6 +27,8 @@ TextStr: String = <s:r"[a-zA-Z0-9,. ]*"> => s.to_string();
 
 QuotedStr: String = "\"" <s:TextStr> "\"" => s;
 
+AtomPath: String = <p:r"/[a-z][a-z0-9_/]*"> => p.to_string();
+
 Num: i32 = <s:TextStr> => i32::from_str(&s).unwrap();
 
 Comment: String = {
@@ -44,8 +46,8 @@ Var: Var = {
 }
 
 Atom: Atom = {
-    <p:TextStr> => Atom { path: p.to_string(), vars: vec![] },
-    <p:TextStr> "{" <v:SemicolSep<Var>> "}" => Atom { path: p.to_string(), vars: v },
+    <p:AtomPath> => Atom { path: p.to_string(), vars: vec![] },
+    <p:AtomPath> "{" <v:SemicolSep<Var>> "}" => Atom { path: p.to_string(), vars: v },
 }
 
 Prototype: Prototype = {
