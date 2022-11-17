@@ -23,13 +23,13 @@ SemicolSep<T>: Vec<T> = {
     }
 };
 
-TextStr: String = <s:r"[a-zA-Z0-9,. ]*"> => s.to_string();
-
-QuotedStr: String = "\"" <s:TextStr> "\"" => s;
+QuotedStr: String = "\"" <s:r"[a-zA-Z0-9,. ]*"> "\"" => s.to_string();
 
 AtomPath: String = <p:r"/[a-z][a-z0-9_/]*"> => p.to_string();
 
-Num: i32 = <s:TextStr> => { dbg!(&s); i32::from_str(&s).unwrap() };
+ProtoId: String = <i:r"[a-zA-Z]+"> => i.to_string();
+
+Num: i32 = <s:r"[0-9]+"> => { dbg!(&s); i32::from_str(&s).unwrap() };
 
 Comment: String = {
     <c:r"//[A-Za-z0-9., ]+"> => c.to_string(),
@@ -42,7 +42,7 @@ VarVal: VarVal = {
 }
 
 Var: Var = {
-    <n:TextStr> " = " <v:VarVal> => Var { name: n, val: v }
+    <n:ProtoId> " = " <v:VarVal> => Var { name: n, val: v }
 }
 
 Atom: Atom = {
@@ -56,7 +56,7 @@ Prototype: Prototype = {
 }
 
 Row: Row = {
-    "(" <c0:Num> "," <c1:Num> "," <c2:Num> ")" "=" "{\"" <t:TextStr*> "\"}"
+    "(" <c0:Num> "," <c1:Num> "," <c2:Num> ")" "=" "{\"" <t:ProtoId*> "\"}"
     => Row { coords: vec![c0, c1, c2], tiles: t.iter().map(|s| s.to_string()).collect(), },
 }
 
