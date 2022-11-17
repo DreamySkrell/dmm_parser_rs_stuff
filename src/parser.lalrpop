@@ -23,7 +23,7 @@ SemicolSep<T>: Vec<T> = {
     }
 };
 
-QuotedStr: String = "\"" <s:r"[a-zA-Z0-9,. ]*"> "\"" => s.to_string();
+QuotedStr: String = <s:r#""[a-zA-Z0-9,. ]*""#> "\"" => s.to_string();
 
 AtomPath: String = <p:r"/[a-z][a-z0-9_/]*"> => p.to_string();
 
