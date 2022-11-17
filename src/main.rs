@@ -2,11 +2,24 @@
 #![allow(unused_imports)]
 
 use lalrpop_util::lalrpop_mod;
+use std::collections::HashMap;
 
 lalrpop_mod!(pub parser); // synthesized by LALRPOP
 
+pub enum VarVal {
+    String(String),
+    Int(i32),
+    List(Vec<i32>),
+}
+
+pub struct Var {
+    name: String,
+    val: VarVal,
+}
+
 pub struct Atom {
     path: String,
+    vars: Vec<Var>,
 }
 
 pub struct Prototype {
@@ -30,7 +43,7 @@ fn parse(dmm: &str) -> Dmm {
 }
 
 fn newline() -> &'static str {
-    "\r\n"
+    "\n"
 }
 
 fn print(dmm: &Dmm) -> String {
@@ -92,8 +105,24 @@ fn parse_compare() {
         println!("   parsed");
         let printed = print(&parsed);
         println!("   printed");
-        println!("{}", original);
-        println!("{}", printed);
+        // println!("{}", original);
+        // println!("{}", printed);
+        if original != printed {
+            let left = &original;
+            let right = &printed;
+
+            for diff in diff::lines(left, right) {
+                match diff {
+                    diff::Result::Left(l) => println!("diff - : {}", l),
+                    diff::Result::Both(l, r) => {
+                        assert_eq!(l, r);
+                        println!("diff   : {}", l);
+                    }
+                    diff::Result::Right(r) => println!("diff + : {}", r),
+                }
+            }
+        }
+
         assert_eq!(original, printed);
         println!("   ok");
     }

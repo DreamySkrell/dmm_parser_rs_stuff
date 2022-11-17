@@ -3,7 +3,7 @@ use crate::*;
 
 grammar;
 
-CommaSeparated<T>: Vec<T> = {
+CommaSep<T>: Vec<T> = {
     <mut v:(<T> ",")*> <e:T?> => match e {
         None => v,
         Some(e) => {
@@ -13,23 +13,46 @@ CommaSeparated<T>: Vec<T> = {
     }
 };
 
+SemicolSep<T>: Vec<T> = {
+    <mut v:(<T> ";")*> <e:T?> => match e {
+        None => v,
+        Some(e) => {
+            v.push(e);
+            v
+        }
+    }
+};
+
+QuotedStr: String = "\"" <s:r""> "\"" => s;
+
+Num: i32 = <s:r"[0-9]+"> => i32::from_str(s).unwrap();
+
 Comment: String = {
     <c:r"//[A-Za-z0-9., ]+"> => c.to_string(),
 }
 
+VarVal: VarVal = {
+    <s:r"[a-z_]+"> => Var::String(s)
+    <n:Num> => Var::Int(n)
+    <l:CommaSep<Num>> => Var::List(l)
+}
+
+Var: Var = {
+    <n:QuotedStr> " = " <v:VarVal> => Var { name: n, val: v }
+
+}
+
 Atom: Atom = {
-    <p:r"/[a-z_][/a-z_]+"> => Atom { path: p.to_string() }
+    <p:QuotedStr> <v:SemicolSep<Var>> => Atom { path: p.to_string(), vars: v }
 }
 
 Prototype: Prototype = {
-    "\"" <id:r"[a-zA-Z]+"> "\" = (" <a:CommaSeparated<Atom>> ")"
+    "\"" <id:r"[a-zA-Z]+"> "\" = (" <a:CommaSep<Atom>> ")"
     => Prototype { id: id.to_string(), atoms: a}
 }
 
-Num: i32 = <s:r"[0-9]+"> => i32::from_str(s).unwrap();
-
 Row: Row = {
-    "(" <c:CommaSeparated<Num>> ")" "=" "{\"" <t:r"[a-zA-Z]+"*> "\"}"
+    "(" <c:CommaSep<Num>> ")" "=" "{\"" <t:r"[a-zA-Z]+"*> "\"}"
     => Row { coords: c, tiles: t.iter().map(|s| s.to_string()).collect(), },
 }
 

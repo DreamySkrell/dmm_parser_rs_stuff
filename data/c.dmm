@@ -1,0 +1,25 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"aa" = (
+/turf/simulated/floor/plating,
+/area/kataphract_chapter/hangar)
+"ab" = (
+/obj/effect/floor_decal/industrial/warning{
+	dir = 4;
+	req_access = list(113);
+	req_one_access = list(115,113);
+	icon_state = "warning"
+	},
+/area/kataphract_chapter/bridge)
+
+(1,1,1) = {"
+aB
+bC
+dE
+Fg
+"}
+(2,1,1) = {"
+aB
+bC
+dE
+Fg
+"}
