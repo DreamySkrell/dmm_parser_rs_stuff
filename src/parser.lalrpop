@@ -1,0 +1,39 @@
+use std::str::FromStr;
+use crate::*;
+
+grammar;
+
+CommaSeparated<T>: Vec<T> = {
+    <mut v:(<T> ",")*> <e:T?> => match e {
+        None => v,
+        Some(e) => {
+            v.push(e);
+            v
+        }
+    }
+};
+
+Comment: String = {
+    <c:r"//[A-Za-z0-9., ]+"> => c.to_string(),
+}
+
+Atom: Atom = {
+    <p:r"/[a-z_][/a-z_]+"> => Atom { path: p.to_string() }
+}
+
+Prototype: Prototype = {
+    "\"" <id:r"[a-zA-Z]+"> "\" = (" <a:CommaSeparated<Atom>> ")"
+    => Prototype { id: id.to_string(), atoms: a}
+}
+
+Num: i32 = <s:r"[0-9]+"> => i32::from_str(s).unwrap();
+
+Row: Row = {
+    "(" <c:CommaSeparated<Num>> ")" "=" "{\"" <t:r"[a-zA-Z]+"*> "\"}"
+    => Row { coords: c, tiles: t.iter().map(|s| s.to_string()).collect(), },
+}
+
+pub Dmm: Dmm = {
+    <c:Comment> <p:Prototype+> <r:Row+>
+    => Dmm { comment: c, prototypes: p, rows: r}
+}

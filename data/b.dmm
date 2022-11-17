@@ -1,0 +1,607 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/space,
+/area/space)
+"b" = (
+/turf/simulated/mineral/planet,
+/area/space_bar)
+"c" = (
+/turf/simulated/mineral/planet,
+/area/storage/autolathe)
+"d" = (
+/turf/space,
+/area/storage/autolathe)
+"e" = (
+/turf/simulated/abyss,
+/area/space_bar)
+"f" = (
+/turf/simulated/mineral/planet,
+/area/overmap)
+"g" = (
+/obj/item/material/stool/chair,
+/turf/space,
+/area/storage/art)
+"h" = (
+/obj/structure/bed/stool/chair/padded/lime,
+/turf/simulated/abyss,
+/area/merchant_station)
+"i" = (
+/turf/simulated/shuttle_roof/legion,
+/area/storage/art)
+"j" = (
+/obj/item/material/stool/chair,
+/turf/simulated/mineral/planet,
+/area/merchant_station/warehouse)
+"k" = (
+/obj/structure/table/glass,
+/turf/space,
+/area/merchant_station/warehouse)
+"l" = (
+/turf/simulated/lava,
+/area/overmap)
+"m" = (
+/obj/structure/bed/stool/chair/padded/lime,
+/turf/simulated/abyss,
+/area/space)
+"n" = (
+/obj/item/material/stool/chair,
+/turf/simulated/shuttle_roof/dark,
+/area/storage/autolathe)
+"o" = (
+/obj/structure/table/glass,
+/turf/simulated/mineral/planet,
+/area/space)
+"p" = (
+/obj/structure/bed/stool/chair/padded/lime,
+/turf/simulated/lava,
+/area/space)
+"q" = (
+/turf/simulated/shuttle_roof/dark,
+/area/merchant_station/warehouse)
+"r" = (
+/turf/space,
+/area/merchant_station)
+"s" = (
+/obj/item/material/stool/chair,
+/turf/simulated/shuttle_roof/dark,
+/area/space)
+"t" = (
+/turf/simulated/shuttle_roof/legion,
+/area/space)
+"u" = (
+/turf/space,
+/area/space_bar)
+"v" = (
+/obj/structure/table/glass,
+/turf/simulated/mineral/planet,
+/area/merchant_station/warehouse)
+"w" = (
+/obj/structure/table/glass,
+/turf/simulated/abyss,
+/area/merchant_station)
+"x" = (
+/turf/space,
+/area/storage/emergency)
+"y" = (
+/turf/simulated/shuttle_roof/dark,
+/area/storage/autolathe)
+"z" = (
+/turf/simulated/lava,
+/area/space)
+"A" = (
+/obj/structure/bed/stool/chair/padded/lime,
+/turf/space,
+/area/space)
+"B" = (
+/turf/space,
+/area/storage/art)
+"C" = (
+/obj/item/material/stool/chair,
+/turf/simulated/shuttle_roof/dark,
+/area/storage/art)
+"D" = (
+/obj/structure/table/glass,
+/turf/space,
+/area/merchant_station)
+"G" = (
+/turf/simulated/mineral/planet,
+/area/storage/emergency)
+"H" = (
+/turf/simulated/lava,
+/area/storage/autolathe)
+"I" = (
+/obj/structure/bed/stool/chair/padded/lime,
+/turf/simulated/mineral/planet,
+/area/space)
+"J" = (
+/turf/space,
+/area/overmap)
+"K" = (
+/turf/simulated/abyss,
+/area/merchant_station)
+"L" = (
+/turf/simulated/shuttle_roof/legion,
+/area/storage/emergency)
+"M" = (
+/turf/simulated/shuttle_roof/legion,
+/area/storage/autolathe)
+"N" = (
+/obj/structure/bed/stool/chair/padded/lime,
+/turf/space,
+/area/merchant_station)
+"O" = (
+/turf/simulated/mineral/planet,
+/area/space)
+"P" = (
+/turf/simulated/abyss,
+/area/space)
+"Q" = (
+/turf/simulated/shuttle_roof/dark,
+/area/merchant_station)
+"R" = (
+/obj/item/material/stool/chair,
+/turf/space,
+/area/space)
+"S" = (
+/turf/simulated/mineral/planet,
+/area/merchant_station)
+"T" = (
+/turf/simulated/lava,
+/area/space_bar)
+"U" = (
+/obj/structure/table/glass,
+/turf/space,
+/area/space)
+"V" = (
+/turf/simulated/shuttle_roof/dark,
+/area/storage/art)
+"X" = (
+/turf/simulated/mineral/planet,
+/area/merchant_station/warehouse)
+"Y" = (
+/turf/space,
+/area/merchant_station/warehouse)
+"Z" = (
+/turf/simulated/shuttle_roof/dark,
+/area/space)
+
+(1,1,1) = {"
+a
+a
+a
+O
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(2,1,1) = {"
+a
+a
+a
+O
+O
+J
+J
+J
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(3,1,1) = {"
+a
+a
+a
+a
+O
+a
+a
+a
+J
+J
+J
+a
+a
+a
+J
+J
+a
+a
+a
+a
+"}
+(4,1,1) = {"
+a
+a
+a
+a
+a
+b
+a
+a
+A
+a
+J
+J
+J
+J
+a
+z
+J
+a
+a
+a
+"}
+(5,1,1) = {"
+a
+a
+a
+Z
+a
+a
+S
+r
+N
+P
+P
+P
+P
+P
+z
+z
+J
+a
+a
+a
+"}
+(6,1,1) = {"
+a
+a
+t
+Z
+Z
+r
+r
+S
+r
+h
+e
+e
+e
+T
+T
+z
+J
+a
+a
+a
+"}
+(7,1,1) = {"
+a
+a
+a
+t
+Z
+r
+D
+r
+K
+K
+m
+A
+A
+a
+u
+z
+l
+a
+a
+a
+"}
+(8,1,1) = {"
+a
+a
+a
+a
+Q
+Q
+D
+w
+K
+r
+P
+P
+p
+p
+z
+H
+J
+O
+O
+a
+"}
+(9,1,1) = {"
+a
+a
+a
+i
+Z
+s
+K
+w
+w
+O
+P
+a
+z
+z
+A
+d
+f
+O
+O
+a
+"}
+(10,1,1) = {"
+a
+a
+a
+i
+a
+s
+Z
+r
+U
+U
+o
+z
+z
+a
+A
+I
+f
+G
+a
+a
+"}
+(11,1,1) = {"
+a
+a
+a
+a
+i
+R
+Z
+Z
+a
+a
+z
+o
+Y
+Y
+c
+I
+J
+x
+a
+a
+"}
+(12,1,1) = {"
+a
+a
+a
+a
+t
+B
+g
+s
+Z
+z
+z
+v
+k
+X
+c
+G
+x
+J
+a
+a
+"}
+(13,1,1) = {"
+a
+a
+a
+a
+a
+t
+B
+V
+C
+C
+g
+X
+v
+Y
+X
+x
+a
+J
+a
+a
+"}
+(14,1,1) = {"
+a
+a
+a
+a
+d
+M
+d
+a
+d
+y
+n
+j
+X
+X
+Y
+a
+a
+a
+a
+a
+"}
+(15,1,1) = {"
+a
+a
+a
+a
+a
+t
+t
+O
+O
+O
+Z
+q
+q
+X
+O
+a
+a
+a
+a
+a
+"}
+(16,1,1) = {"
+a
+a
+a
+a
+a
+a
+O
+L
+L
+G
+x
+x
+q
+q
+a
+a
+a
+a
+a
+a
+"}
+(17,1,1) = {"
+a
+a
+a
+a
+a
+a
+x
+O
+O
+t
+t
+a
+Z
+Z
+a
+O
+a
+a
+a
+a
+"}
+(18,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+t
+t
+a
+Z
+a
+O
+a
+a
+a
+a
+"}
+(19,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+t
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(20,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}

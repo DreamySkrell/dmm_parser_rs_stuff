@@ -1,0 +1,20 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"aa" = (
+/turf/simulated/floor/plating,
+/area/kataphract_chapter/hangar)
+"ab" = (
+/turf/simulated/wall/r_wall,
+/area/kataphract_chapter/bridge)
+
+(1,1,1) = {"
+aB
+bC
+dE
+Fg
+"}
+(2,1,1) = {"
+aB
+bC
+dE
+Fg
+"}
