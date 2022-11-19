@@ -51,7 +51,7 @@ Atom: Atom = {
 }
 
 Prototype: Prototype = {
-    <id:QuotedStr> " = (" <a:CommaSep<Atom>> ")"
+    "\"" <id:ProtoId> "\" = (" <a:CommaSep<Atom>> ")" 
     => Prototype { id: id.to_string(), atoms: a}
 }
 
