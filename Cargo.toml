@@ -11,4 +11,4 @@ regex = "1"
 diff = "0.1"
 
 [build-dependencies]
-lalrpop = "0.19.7"
+lalrpop = "0.19"

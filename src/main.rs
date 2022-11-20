@@ -1,7 +1,10 @@
 #![allow(dead_code)]
 #![allow(unused_imports)]
 
+mod lexer;
+
 use lalrpop_util::lalrpop_mod;
+use lexer::*;
 use std::collections::HashMap;
 
 lalrpop_mod!(pub parser); // synthesized by LALRPOP
@@ -39,7 +42,19 @@ pub struct Dmm {
 }
 
 fn parse(dmm: &str) -> Dmm {
-    parser::DmmParser::new().parse(&dmm).unwrap()
+    //parser::DmmParser::new().parse(&dmm).unwrap()
+
+    let tokens = lexe(dmm);
+
+    for (i, t) in tokens {
+        println!("{}: {:?}", i, t);
+    }
+
+    Dmm {
+        comment: "".into(),
+        prototypes: vec![],
+        rows: vec![],
+    }
 }
 
 fn newline() -> &'static str {
