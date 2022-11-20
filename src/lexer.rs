@@ -5,7 +5,7 @@ pub enum Token {
     Comment(String),
     RowDefEnd,
     PrototypeDefStart(String),
-    Path(String),
+    AtomPath(String),
     RowDefStart(Vec<i32>),
     PrototypeId(String),
     EmptyLine,
@@ -49,7 +49,7 @@ pub fn lexe(dmm: &str) -> Vec<(usize, Token)> {
             } else if line.starts_with("/") {
                 let mut p = line.to_string();
                 p.pop();
-                Token::Path(p)
+                Token::AtomPath(p)
             } else if line.contains(") = {\"") {
                 Token::RowDefStart(str_to_int_list(substr_between(line, "(", ")").into()))
             } else if line.len() == prototype_len {

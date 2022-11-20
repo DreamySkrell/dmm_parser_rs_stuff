@@ -42,19 +42,14 @@ pub struct Dmm {
 }
 
 fn parse(dmm: &str) -> Dmm {
-    //parser::DmmParser::new().parse(&dmm).unwrap()
+    let tokens: Vec<(usize, Token, usize)> =
+        lexe(dmm).iter().map(|(n, t)| (*n, t.clone(), 0)).collect();
 
-    let tokens = lexe(dmm);
-
-    for (i, t) in tokens {
+    for (i, t, _) in &tokens {
         println!("{}: {:?}", i, t);
     }
 
-    Dmm {
-        comment: "".into(),
-        prototypes: vec![],
-        rows: vec![],
-    }
+    parser::DmmParser::new().parse(tokens).unwrap()
 }
 
 fn newline() -> &'static str {
@@ -65,7 +60,7 @@ fn print(dmm: &Dmm) -> String {
     let mut s = String::new();
 
     // comment
-    s.push_str(&format!("{}{}", dmm.comment, newline()));
+    s.push_str(&format!("//{}{}", dmm.comment, newline()));
 
     // prototypes
     for proto in &dmm.prototypes {
