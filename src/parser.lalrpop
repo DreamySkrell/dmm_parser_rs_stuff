@@ -16,6 +16,11 @@ extern {
         PrototypeDefStart => Token::PrototypeDefStart(<String>),
         AtomPath => Token::AtomPath(<String>),
         
+        VarInt => Token::VarInt(<(String, i32)>),
+        VarString => Token::VarString(<(String, String)>),
+        VarList => Token::VarList(<(String, Vec<i32>)>),
+        VarEnd => Token::VarEnd,
+        
         RowDefStart => Token::RowDefStart(<Vec<i32>>),
         PrototypeId => Token::PrototypeId(<String>),
         RowDefEnd => Token::RowDefEnd,
@@ -28,60 +33,30 @@ extern {
 
 // ============================================================ grammar
 
+Var: Var = {
+    <v:VarInt>    => Var { name: v.0, val: VarVal::Int(v.1), },
+    <v:VarString> => Var { name: v.0, val: VarVal::String(v.1), },
+    <v:VarList>   => Var { name: v.0, val: VarVal::List(v.1), },
+}
+
 Atom: Atom = {
     <p:AtomPath>
-    => Atom { path: p, vars: vec![], }
+        => Atom { path: p, vars: vec![], },
+    <p:AtomPath> <v:Var+> VarEnd
+        => Atom { path: p, vars: v, },
 }
 
 Prototype: Prototype = {
     <i:PrototypeDefStart> <a:Atom+>
-    => Prototype { id: i, atoms: a, }
+        => Prototype { id: i, atoms: a, },
 }
 
 Row: Row = {
     <i:RowDefStart> <t:PrototypeId+> RowDefEnd
-    => Row { coords: i, tiles: t, },
+        => Row { coords: i, tiles: t, },
 }
 
 pub Dmm: Dmm = {
     <c:Comment> <p:Prototype+> EmptyLine <r:Row+>
-    => Dmm { comment: c, prototypes: p, rows: r}
+        => Dmm { comment: c, prototypes: p, rows: r},
 }
-
-// QuotedStr: String = <s:r#""[a-zA-Z0-9,. ]*""#> "\"" => s.to_string();
-
-// AtomPath: String = <p:r"/[a-z][a-z0-9_/]*"> => p.to_string();
-
-// ProtoId: String = <i:r"[a-zA-Z]+"> => i.to_string();
-
-// Num: i32 = <s:r"[0-9]+"> => { dbg!(&s); i32::from_str(&s).unwrap() };
-
-// Comment: String = {
-//     <c:r"//[A-Za-z0-9., ]+"> => c.to_string(),
-// }
-
-// VarVal: VarVal = {
-//     <s:QuotedStr> => VarVal::String(s),
-//     <n:Num> => VarVal::Int(n),
-//     "list(" <l:CommaSep<Num>> ")" => VarVal::List(l),
-// }
-
-// Var: Var = {
-//     <n:ProtoId> " = " <v:VarVal> => Var { name: n, val: v }
-// }
-
-// Atom: Atom = {
-//     <p:AtomPath> => Atom { path: p.to_string(), vars: vec![] },
-//     <p:AtomPath> "{" <v:SemicolSep<Var>> "}" => Atom { path: p.to_string(), vars: v },
-// }
-
-// Prototype: Prototype = {
-//     "\"" <id:ProtoId> "\" = (" <a:CommaSep<Atom>> ")" 
-//     => Prototype { id: id.to_string(), atoms: a}
-// }
-
-// Row: Row = {
-//     "(" <c0:Num> "," <c1:Num> "," <c2:Num> ")" "=" "{\"" <t:ProtoId*> "\"}"
-//     => Row { coords: vec![c0, c1, c2], tiles: t.iter().map(|s| s.to_string()).collect(), },
-// }
-

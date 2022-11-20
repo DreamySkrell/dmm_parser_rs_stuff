@@ -3,11 +3,19 @@ use std::ops::Add;
 #[derive(Debug, Clone)]
 pub enum Token {
     Comment(String),
-    RowDefEnd,
+
     PrototypeDefStart(String),
     AtomPath(String),
+
+    VarInt((String, i32)),
+    VarString((String, String)),
+    VarList((String, Vec<i32>)),
+    VarEnd,
+
     RowDefStart(Vec<i32>),
     PrototypeId(String),
+    RowDefEnd,
+
     EmptyLine,
 
     Err,
@@ -52,8 +60,26 @@ pub fn lexe(dmm: &str) -> Vec<(usize, Token)> {
                 Token::AtomPath(p)
             } else if line.contains(") = {\"") {
                 Token::RowDefStart(str_to_int_list(substr_between(line, "(", ")").into()))
+            } else if line.contains(" = \"") {
+                let name = substr_between(line, "\t", " = ");
+                let val = substr_between(line, "\"", "\"");
+                Token::VarString((name.into(), val.into()))
+            } else if line.contains(" = list(") {
+                let name = substr_between(line, "\t", " = list(");
+                let val = substr_between(line, "list(", ")");
+                Token::VarList((name.into(), str_to_int_list(val)))
+            } else if line.contains(" = ") {
+                let name = substr_between(line, "\t", " = list(");
+                let mut val: String =
+                    line[line.find(" = ").map(|n| n + " = ".len()).unwrap()..].into();
+                if val.ends_with(";") {
+                    val.pop();
+                }
+                Token::VarInt((name.into(), val.parse::<i32>().unwrap()))
             } else if line.len() == prototype_len {
                 Token::PrototypeId(line.into())
+            } else if line.contains("},") {
+                Token::VarEnd
             } else if line == "" {
                 Token::EmptyLine
             } else {

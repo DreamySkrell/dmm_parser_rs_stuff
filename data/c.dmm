@@ -5,6 +5,7 @@
 "ab" = (
 /obj/effect/floor_decal/industrial/warning{
 	dir = 4;
+	axu = 6;
 	req_access = list(113);
 	req_one_access = list(115,113);
 	icon_state = "warning"
