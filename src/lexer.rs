@@ -69,7 +69,7 @@ pub fn lexe(dmm: &str) -> Vec<(usize, Token)> {
                 let val = substr_between(line, "list(", ")");
                 Token::VarList((name.into(), str_to_int_list(val)))
             } else if line.contains(" = ") {
-                let name = substr_between(line, "\t", " = list(");
+                let name = substr_between(line, "\t", " = ");
                 let mut val: String =
                     line[line.find(" = ").map(|n| n + " = ".len()).unwrap()..].into();
                 if val.ends_with(";") {

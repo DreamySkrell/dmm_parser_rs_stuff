@@ -103,7 +103,7 @@ fn print(dmm: &Dmm) -> String {
                         s.push_str(&format!(";"));
                     }
                 }
-                s.push_str(&format!("{}}},", tabchar()));
+                s.push_str(&format!("{}{}}}", newline(), tabchar()));
             }
 
             if i < proto.atoms.len() - 1 {
