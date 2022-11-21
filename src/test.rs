@@ -18,8 +18,10 @@ fn parse_compare() {
         println!("   parsed");
         let printed = print(&parsed);
         println!("   printed");
+
         // println!("{}", original);
         // println!("{}", printed);
+
         if original != printed {
             let left = &original;
             let right = &printed;
@@ -36,7 +38,11 @@ fn parse_compare() {
             }
         }
 
-        assert_eq!(original, printed);
+        if original != printed {
+            panic!();
+        }
+
+        // assert_eq!(original, printed);
         println!("   ok");
     }
 }
