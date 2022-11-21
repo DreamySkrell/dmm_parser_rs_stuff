@@ -21,6 +21,7 @@ extern {
         VarString => Token::VarString(<(String, String)>),
         VarPath => Token::VarPath(<(String, String)>),
         VarList => Token::VarList(<(String, Vec<i32>)>),
+        VarListString => Token::VarListString(<(String, Vec<String>)>),
         VarEnd => Token::VarEnd,
         
         RowDefStart => Token::RowDefStart(<Vec<i32>>),
@@ -36,11 +37,12 @@ extern {
 // ============================================================ grammar
 
 Var: Var = {
-    <v:VarInt>    => Var { name: v.0, val: VarVal::Int(v.1), },
-    <v:VarString> => Var { name: v.0, val: VarVal::String(v.1), },
-    <v:VarPath>   => Var { name: v.0, val: VarVal::Path(v.1), },
-    <v:VarList>   => Var { name: v.0, val: VarVal::List(v.1), },
-    <v:VarNull>   => Var { name: v.0, val: VarVal::Null, },
+    <v:VarInt>          => Var { name: v.0, val: VarVal::Int(v.1), },
+    <v:VarString>       => Var { name: v.0, val: VarVal::String(v.1), },
+    <v:VarPath>         => Var { name: v.0, val: VarVal::Path(v.1), },
+    <v:VarList>         => Var { name: v.0, val: VarVal::List(v.1), },
+    <v:VarListString>   => Var { name: v.0, val: VarVal::ListString(v.1), },
+    <v:VarNull>         => Var { name: v.0, val: VarVal::Null, },
 }
 
 Atom: Atom = {

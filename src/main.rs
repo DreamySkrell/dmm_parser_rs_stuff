@@ -19,6 +19,7 @@ pub enum VarVal {
     Null,
     Int(f64),
     List(Vec<i32>),
+    ListString(Vec<String>),
 }
 
 pub struct Var {
@@ -104,6 +105,17 @@ fn print(dmm: &Dmm) -> String {
                                 l.iter()
                                     .map(|i| i.to_string())
                                     .intersperse(",".into())
+                                    .collect::<String>()
+                            ));
+                        }
+                        VarVal::ListString(l) => {
+                            s.push_str(&format!(
+                                "{}{} = list(\"{}\")",
+                                tabchar(),
+                                var.name,
+                                l.iter()
+                                    .map(|i| i.to_string())
+                                    .intersperse("\",\"".into())
                                     .collect::<String>()
                             ));
                         }

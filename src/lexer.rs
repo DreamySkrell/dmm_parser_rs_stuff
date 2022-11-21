@@ -1,5 +1,7 @@
 use std::ops::Add;
 
+use itertools::Itertools;
+
 #[derive(Debug, Clone)]
 pub enum Token {
     Comment(String),
@@ -12,6 +14,7 @@ pub enum Token {
     VarString((String, String)),
     VarPath((String, String)),
     VarList((String, Vec<i32>)),
+    VarListString((String, Vec<String>)),
     VarEnd,
 
     RowDefStart(Vec<i32>),
@@ -70,6 +73,14 @@ pub fn lexe(dmm: &str) -> Vec<(usize, Token)> {
                 let name = substr_between(line, "\t", " = ");
                 let val = substr_between(line, "'", "'");
                 Token::VarPath((name.into(), val.into()))
+            } else if line.contains(" = list(\"") {
+                let name = substr_between(line, "\t", " = list(");
+                let val = substr_between(line, "list(", ")")
+                    .split(",")
+                    .map(|s| substr_between(s, "\"", "\""))
+                    .map(|s| s.to_string())
+                    .collect_vec();
+                Token::VarListString((name.into(), val))
             } else if line.contains(" = list(") {
                 let name = substr_between(line, "\t", " = list(");
                 let val = substr_between(line, "list(", ")");
