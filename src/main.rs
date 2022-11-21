@@ -11,10 +11,12 @@ mod flip;
 use itertools::Itertools;
 use lalrpop_util::lalrpop_mod;
 use lexer::*;
+use linked_hash_map::LinkedHashMap;
 use std::collections::HashMap;
 
 lalrpop_mod!(pub parser); // synthesized by LALRPOP
 
+#[derive(Debug, Clone)]
 pub enum VarVal {
     String(String),
     Path(String),
@@ -24,14 +26,9 @@ pub enum VarVal {
     ListString(Vec<String>),
 }
 
-pub struct Var {
-    name: String,
-    val: VarVal,
-}
-
 pub struct Atom {
     path: String,
-    vars: Vec<Var>,
+    vars: LinkedHashMap<String, VarVal>,
 }
 
 pub struct Prototype {
@@ -86,24 +83,24 @@ fn print(dmm: &Dmm) -> String {
                 s.push_str(&format!("{{"));
                 for (ii, var) in atom.vars.iter().enumerate() {
                     s.push_str(&format!("{}", newline()));
-                    match &var.val {
+                    match &var.1 {
                         VarVal::String(ss) => {
-                            s.push_str(&format!("{}{} = \"{}\"", tabchar(), var.name, ss));
+                            s.push_str(&format!("{}{} = \"{}\"", tabchar(), var.0, ss));
                         }
                         VarVal::Path(ss) => {
-                            s.push_str(&format!("{}{} = '{}'", tabchar(), var.name, ss));
+                            s.push_str(&format!("{}{} = '{}'", tabchar(), var.0, ss));
                         }
                         VarVal::Null => {
-                            s.push_str(&format!("{}{} = {}", tabchar(), var.name, "null"));
+                            s.push_str(&format!("{}{} = {}", tabchar(), var.0, "null"));
                         }
                         VarVal::Int(i) => {
-                            s.push_str(&format!("{}{} = {}", tabchar(), var.name, i));
+                            s.push_str(&format!("{}{} = {}", tabchar(), var.0, i));
                         }
                         VarVal::List(l) => {
                             s.push_str(&format!(
                                 "{}{} = list({})",
                                 tabchar(),
-                                var.name,
+                                var.0,
                                 l.iter()
                                     .map(|i| i.to_string())
                                     .intersperse(",".into())
@@ -114,7 +111,7 @@ fn print(dmm: &Dmm) -> String {
                             s.push_str(&format!(
                                 "{}{} = list(\"{}\")",
                                 tabchar(),
-                                var.name,
+                                var.0,
                                 l.iter()
                                     .map(|i| i.to_string())
                                     .intersperse("\",\"".into())

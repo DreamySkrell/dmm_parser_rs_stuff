@@ -36,20 +36,20 @@ extern {
 
 // ============================================================ grammar
 
-Var: Var = {
-    <v:VarInt>          => Var { name: v.0, val: VarVal::Int(v.1), },
-    <v:VarString>       => Var { name: v.0, val: VarVal::String(v.1), },
-    <v:VarPath>         => Var { name: v.0, val: VarVal::Path(v.1), },
-    <v:VarList>         => Var { name: v.0, val: VarVal::List(v.1), },
-    <v:VarListString>   => Var { name: v.0, val: VarVal::ListString(v.1), },
-    <v:VarNull>         => Var { name: v.0, val: VarVal::Null, },
+Var: (String, VarVal) = {
+    <v:VarInt>          => ( v.0, VarVal::Int(v.1), ),
+    <v:VarString>       => ( v.0, VarVal::String(v.1), ),
+    <v:VarPath>         => ( v.0, VarVal::Path(v.1), ),
+    <v:VarList>         => ( v.0, VarVal::List(v.1), ),
+    <v:VarListString>   => ( v.0, VarVal::ListString(v.1), ),
+    <v:VarNull>         => ( v.0, VarVal::Null, ),
 }
 
 Atom: Atom = {
     <p:AtomPath>
-        => Atom { path: p, vars: vec![], },
+        => Atom { path: p, vars: LinkedHashMap::new(), },
     <p:AtomPath> <v:Var+> VarEnd
-        => Atom { path: p, vars: v, },
+        => Atom { path: p, vars: v.iter().map(|(a, b)| (a.clone(), (*b).clone())).collect(), },
 }
 
 Prototype: Prototype = {
