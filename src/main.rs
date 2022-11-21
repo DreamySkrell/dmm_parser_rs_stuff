@@ -14,7 +14,7 @@ lalrpop_mod!(pub parser); // synthesized by LALRPOP
 pub enum VarVal {
     String(String),
     Null,
-    Int(i32),
+    Int(f64),
     List(Vec<i32>),
 }
 

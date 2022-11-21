@@ -7,7 +7,7 @@ pub enum Token {
     PrototypeDefStart(String),
     AtomPath(String),
 
-    VarInt((String, i32)),
+    VarInt((String, f64)),
     VarNull((String, ())),
     VarString((String, String)),
     VarList((String, Vec<i32>)),
@@ -79,7 +79,7 @@ pub fn lexe(dmm: &str) -> Vec<(usize, Token)> {
                 if val.ends_with(";") {
                     val.pop();
                 }
-                Token::VarInt((name.into(), val.parse::<i32>().unwrap()))
+                Token::VarInt((name.into(), val.parse::<f64>().unwrap()))
             } else if line.len() == prototype_len {
                 Token::PrototypeId(line.into())
             } else if line.contains("},") {

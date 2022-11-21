@@ -16,7 +16,7 @@ extern {
         PrototypeDefStart => Token::PrototypeDefStart(<String>),
         AtomPath => Token::AtomPath(<String>),
         
-        VarInt => Token::VarInt(<(String, i32)>),
+        VarInt => Token::VarInt(<(String, f64)>),
         VarNull => Token::VarNull(<(String, ())>),
         VarString => Token::VarString(<(String, String)>),
         VarList => Token::VarList(<(String, Vec<i32>)>),
