@@ -96,10 +96,10 @@ pub fn lexe(dmm: &str) -> Vec<(usize, Token)> {
                     val.pop();
                 }
                 Token::VarInt((name.into(), val.parse::<f64>().unwrap()))
-            } else if line.len() == prototype_len {
-                Token::PrototypeId(line.into())
             } else if line.contains("},") {
                 Token::VarEnd
+            } else if line.len() == prototype_len {
+                Token::PrototypeId(line.into())
             } else if line == "" {
                 Token::EmptyLine
             } else {

@@ -2,9 +2,11 @@
 #![allow(unused_imports)]
 #![allow(unstable_name_collisions)]
 
-mod flip;
 mod lexer;
+
 mod test;
+
+mod flip;
 
 use itertools::Itertools;
 use lalrpop_util::lalrpop_mod;
