@@ -47,9 +47,9 @@ fn parse(dmm: &str) -> Dmm {
     let tokens: Vec<(usize, Token, usize)> =
         lexe(dmm).iter().map(|(n, t)| (*n, t.clone(), 0)).collect();
 
-    for (i, t, _) in &tokens {
-        println!("{}: {:?}", i, t);
-    }
+    // for (i, t, _) in &tokens {
+    //     println!("{}: {:?}", i, t);
+    // }
 
     parser::DmmParser::new().parse(tokens).unwrap()
 }

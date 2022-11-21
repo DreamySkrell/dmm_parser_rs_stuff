@@ -86,7 +86,7 @@ pub fn lexe(dmm: &str) -> Vec<(usize, Token)> {
                 panic!("cannot lexe line: {}", n)
             }
         };
-        //println!("{}: {:?}", n, token.clone());
+        println!("{}: {:?}", n, token.clone());
         tokens.push((n, token));
     }
     tokens
