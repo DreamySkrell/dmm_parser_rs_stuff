@@ -3,6 +3,7 @@
 #![allow(unstable_name_collisions)]
 
 mod lexer;
+mod test;
 
 use itertools::Itertools;
 use lalrpop_util::lalrpop_mod;
@@ -13,6 +14,7 @@ lalrpop_mod!(pub parser); // synthesized by LALRPOP
 
 pub enum VarVal {
     String(String),
+    Path(String),
     Null,
     Int(f64),
     List(Vec<i32>),
@@ -84,6 +86,9 @@ fn print(dmm: &Dmm) -> String {
                         VarVal::String(ss) => {
                             s.push_str(&format!("{}{} = \"{}\"", tabchar(), var.name, ss));
                         }
+                        VarVal::Path(ss) => {
+                            s.push_str(&format!("{}{} = '{}'", tabchar(), var.name, ss));
+                        }
                         VarVal::Null => {
                             s.push_str(&format!("{}{} = {}", tabchar(), var.name, "null"));
                         }
@@ -137,47 +142,6 @@ fn print(dmm: &Dmm) -> String {
 
     // done
     s
-}
-
-#[test]
-fn sanity() {
-    for dmm in std::fs::read_dir("data").unwrap() {
-        let _ = std::fs::read_to_string(dmm.unwrap().path()).unwrap();
-    }
-}
-
-#[test]
-fn parse_compare() {
-    for dmm in std::fs::read_dir("data").unwrap() {
-        let path = dmm.unwrap().path();
-        println!("-- {}", path.to_str().unwrap());
-        let original = std::fs::read_to_string(path).unwrap();
-        println!("   read");
-        let parsed = parse(&original);
-        println!("   parsed");
-        let printed = print(&parsed);
-        println!("   printed");
-        // println!("{}", original);
-        // println!("{}", printed);
-        if original != printed {
-            let left = &original;
-            let right = &printed;
-
-            for diff in diff::lines(left, right) {
-                match diff {
-                    diff::Result::Left(l) => println!("diff - : {}", l),
-                    diff::Result::Both(l, r) => {
-                        assert_eq!(l, r);
-                        println!("diff   : {}", l);
-                    }
-                    diff::Result::Right(r) => println!("diff + : {}", r),
-                }
-            }
-        }
-
-        assert_eq!(original, printed);
-        println!("   ok");
-    }
 }
 
 fn main() {

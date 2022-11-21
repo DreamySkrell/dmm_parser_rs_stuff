@@ -19,6 +19,7 @@ extern {
         VarInt => Token::VarInt(<(String, f64)>),
         VarNull => Token::VarNull(<(String, ())>),
         VarString => Token::VarString(<(String, String)>),
+        VarPath => Token::VarPath(<(String, String)>),
         VarList => Token::VarList(<(String, Vec<i32>)>),
         VarEnd => Token::VarEnd,
         
@@ -37,6 +38,7 @@ extern {
 Var: Var = {
     <v:VarInt>    => Var { name: v.0, val: VarVal::Int(v.1), },
     <v:VarString> => Var { name: v.0, val: VarVal::String(v.1), },
+    <v:VarPath>   => Var { name: v.0, val: VarVal::Path(v.1), },
     <v:VarList>   => Var { name: v.0, val: VarVal::List(v.1), },
     <v:VarNull>   => Var { name: v.0, val: VarVal::Null, },
 }

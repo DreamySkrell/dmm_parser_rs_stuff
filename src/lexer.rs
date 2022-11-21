@@ -10,6 +10,7 @@ pub enum Token {
     VarInt((String, f64)),
     VarNull((String, ())),
     VarString((String, String)),
+    VarPath((String, String)),
     VarList((String, Vec<i32>)),
     VarEnd,
 
@@ -65,6 +66,10 @@ pub fn lexe(dmm: &str) -> Vec<(usize, Token)> {
                 let name = substr_between(line, "\t", " = ");
                 let val = substr_between(line, "\"", "\"");
                 Token::VarString((name.into(), val.into()))
+            } else if line.contains(" = '") {
+                let name = substr_between(line, "\t", " = ");
+                let val = substr_between(line, "'", "'");
+                Token::VarPath((name.into(), val.into()))
             } else if line.contains(" = list(") {
                 let name = substr_between(line, "\t", " = list(");
                 let val = substr_between(line, "list(", ")");
