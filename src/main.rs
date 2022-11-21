@@ -13,6 +13,7 @@ lalrpop_mod!(pub parser); // synthesized by LALRPOP
 
 pub enum VarVal {
     String(String),
+    Null,
     Int(i32),
     List(Vec<i32>),
 }
@@ -82,6 +83,9 @@ fn print(dmm: &Dmm) -> String {
                     match &var.val {
                         VarVal::String(ss) => {
                             s.push_str(&format!("{}{} = \"{}\"", tabchar(), var.name, ss));
+                        }
+                        VarVal::Null => {
+                            s.push_str(&format!("{}{} = {}", tabchar(), var.name, "null"));
                         }
                         VarVal::Int(i) => {
                             s.push_str(&format!("{}{} = {}", tabchar(), var.name, i));

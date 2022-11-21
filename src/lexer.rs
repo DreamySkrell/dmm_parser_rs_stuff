@@ -8,6 +8,7 @@ pub enum Token {
     AtomPath(String),
 
     VarInt((String, i32)),
+    VarNull((String, ())),
     VarString((String, String)),
     VarList((String, Vec<i32>)),
     VarEnd,
@@ -68,6 +69,9 @@ pub fn lexe(dmm: &str) -> Vec<(usize, Token)> {
                 let name = substr_between(line, "\t", " = list(");
                 let val = substr_between(line, "list(", ")");
                 Token::VarList((name.into(), str_to_int_list(val)))
+            } else if line.contains(" = null") {
+                let name = substr_between(line, "\t", " = ");
+                Token::VarNull((name.into(), ()))
             } else if line.contains(" = ") {
                 let name = substr_between(line, "\t", " = ");
                 let mut val: String =

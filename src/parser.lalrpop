@@ -17,6 +17,7 @@ extern {
         AtomPath => Token::AtomPath(<String>),
         
         VarInt => Token::VarInt(<(String, i32)>),
+        VarNull => Token::VarNull(<(String, ())>),
         VarString => Token::VarString(<(String, String)>),
         VarList => Token::VarList(<(String, Vec<i32>)>),
         VarEnd => Token::VarEnd,
@@ -37,6 +38,7 @@ Var: Var = {
     <v:VarInt>    => Var { name: v.0, val: VarVal::Int(v.1), },
     <v:VarString> => Var { name: v.0, val: VarVal::String(v.1), },
     <v:VarList>   => Var { name: v.0, val: VarVal::List(v.1), },
+    <v:VarNull>   => Var { name: v.0, val: VarVal::Null, },
 }
 
 Atom: Atom = {
