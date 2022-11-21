@@ -2,6 +2,7 @@
 #![allow(unused_imports)]
 #![allow(unstable_name_collisions)]
 
+mod flip;
 mod lexer;
 mod test;
 
