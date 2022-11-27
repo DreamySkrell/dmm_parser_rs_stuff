@@ -127,6 +127,9 @@ pub fn flip() {
                 // ----------------------------------------------
                 // air alarms
                 if atom.path.contains("machinery/alarm") {
+                    if let Some(VarVal::Int(pixel_y)) = atom.vars.get_mut("pixel_y") {
+                        *pixel_y = *pixel_y * -1.0;
+                    }
                     if let Some(VarVal::Int(dir)) = atom.vars.get_mut("dir") {
                         if *dir == 1.0 {
                             *dir = 2.0
@@ -135,10 +138,6 @@ pub fn flip() {
                     }
                     if let None = atom.vars.get_mut("dir") {
                         atom.vars.insert("dir".into(), VarVal::Int(1.0));
-                        continue;
-                    }
-                    if let Some(VarVal::Int(pixel_y)) = atom.vars.get_mut("pixel_y") {
-                        *pixel_y = *pixel_y * -1.0;
                         continue;
                     }
                 }
@@ -146,6 +145,9 @@ pub fn flip() {
                 // ----------------------------------------------
                 // APCs
                 if atom.path.contains("machinery/power/apc") {
+                    if let Some(VarVal::Int(pixel_y)) = atom.vars.get_mut("pixel_y") {
+                        *pixel_y = *pixel_y * -1.0;
+                    }
                     if let Some(VarVal::Int(dir)) = atom.vars.get_mut("dir") {
                         if *dir == 1.0 {
                             *dir = 2.0
@@ -154,10 +156,6 @@ pub fn flip() {
                     }
                     if let None = atom.vars.get_mut("dir") {
                         atom.vars.insert("dir".into(), VarVal::Int(1.0));
-                        continue;
-                    }
-                    if let Some(VarVal::Int(pixel_y)) = atom.vars.get_mut("pixel_y") {
-                        *pixel_y = *pixel_y * -1.0;
                         continue;
                     }
                 }
