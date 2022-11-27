@@ -159,4 +159,5 @@ fn print(dmm: &Dmm) -> String {
 fn main() {
     //let dmm = std::fs::read_to_string("data/x.dmm").unwrap();
     //let dmm = parser::DmmParser::new().parse(&dmm).unwrap();
+    flip::flip();
 }
