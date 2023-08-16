@@ -7,6 +7,7 @@ mod lexer;
 mod test;
 
 mod flip;
+mod remap_34;
 
 use itertools::Itertools;
 use lalrpop_util::lalrpop_mod;
@@ -26,21 +27,25 @@ pub enum VarVal {
     ListString(Vec<String>),
 }
 
+#[derive(Debug, Clone)]
 pub struct Atom {
     path: String,
     vars: LinkedHashMap<String, VarVal>,
 }
 
+#[derive(Debug, Clone)]
 pub struct Prototype {
     id: String,
     atoms: Vec<Atom>,
 }
 
+#[derive(Debug, Clone)]
 pub struct Row {
     coords: Vec<i32>,
     tiles: Vec<String>,
 }
 
+#[derive(Debug, Clone)]
 pub struct Dmm {
     comment: String,
     prototypes: Vec<Prototype>,
@@ -59,7 +64,7 @@ fn parse(dmm: &str) -> Dmm {
 }
 
 fn newline() -> &'static str {
-    "\n"
+    "\r\n"
 }
 
 fn tabchar() -> &'static str {
@@ -94,7 +99,12 @@ fn print(dmm: &Dmm) -> String {
                             s.push_str(&format!("{}{} = {}", tabchar(), var.0, "null"));
                         }
                         VarVal::Int(i) => {
-                            s.push_str(&format!("{}{} = {}", tabchar(), var.0, i));
+                            let i_str = if *i >= 5000000f64 {
+                                i.to_string()
+                            } else {
+                                i.to_string()
+                            };
+                            s.push_str(&format!("{}{} = {}", tabchar(), var.0, i_str));
                         }
                         VarVal::List(l) => {
                             s.push_str(&format!(
@@ -159,5 +169,6 @@ fn print(dmm: &Dmm) -> String {
 fn main() {
     //let dmm = std::fs::read_to_string("data/x.dmm").unwrap();
     //let dmm = parser::DmmParser::new().parse(&dmm).unwrap();
-    flip::flip();
+    // flip::flip();
+    remap_34::remap();
 }
