@@ -27,6 +27,29 @@ pub fn remap() {
         });
 
         for atom in &mut prototype.atoms {
+            let atom_cloned = atom.clone();
+            let pixel_x = if atom_cloned.vars.contains_key("pixel_x") {
+                if let VarVal::Int(pixel_x) = atom_cloned.vars["pixel_x"] {
+                    Some(pixel_x)
+                } else {
+                    None
+                }
+            } else {
+                None
+            };
+            let pixel_y = if atom_cloned.vars.contains_key("pixel_y") {
+                if let VarVal::Int(pixel_y) = atom_cloned.vars["pixel_y"] {
+                    Some(pixel_y)
+                } else {
+                    None
+                }
+            } else {
+                None
+            };
+            let is_directional_subtype = ["/east", "/west", "/south", "/north"]
+                .iter()
+                .any(|dir| atom.path.ends_with(dir));
+
             // ----------------------------------------------
             // replace light floor decals with dark
             // on dark floor tiles
@@ -45,103 +68,150 @@ pub fn remap() {
             }
 
             // ----------------------------------------------
-            // fix up APCs
-            {
-                let atom_cloned = atom.clone();
-                if atom_cloned.path.starts_with("/obj/machinery/power/apc") {
-                    if atom_cloned.vars.contains_key("dir") {
-                        if matches!(atom_cloned.vars["dir"], VarVal::Int(8.0)) {
-                            atom.path = format!("{}/west", atom.path);
-                            atom.vars.remove("dir");
-                            atom.vars.remove("pixel_x");
-                            atom.vars.remove("name");
-                        }
+            // directional stuff
+            if !is_directional_subtype {
+                // ----------------------------------------------
+                // fix up APCs
+                {
+                    if atom_cloned.path.starts_with("/obj/machinery/power/apc") {
+                        if atom_cloned.vars.contains_key("dir") {
+                            if matches!(atom_cloned.vars["dir"], VarVal::Int(8.0)) {
+                                atom.path = format!("{}/west", atom.path);
+                                atom.vars.remove("dir");
+                                atom.vars.remove("pixel_x");
+                                atom.vars.remove("name");
+                            }
 
-                        if matches!(atom_cloned.vars["dir"], VarVal::Int(4.0)) {
-                            atom.path = format!("{}/east", atom.path);
-                            atom.vars.remove("dir");
-                            atom.vars.remove("pixel_x");
-                            atom.vars.remove("name");
-                        }
+                            if matches!(atom_cloned.vars["dir"], VarVal::Int(4.0)) {
+                                atom.path = format!("{}/east", atom.path);
+                                atom.vars.remove("dir");
+                                atom.vars.remove("pixel_x");
+                                atom.vars.remove("name");
+                            }
 
-                        if matches!(atom_cloned.vars["dir"], VarVal::Int(1.0)) {
-                            atom.path = format!("{}/north", atom.path);
-                            atom.vars.remove("dir");
-                            atom.vars.remove("pixel_y");
-                            atom.vars.remove("name");
-                        }
+                            if matches!(atom_cloned.vars["dir"], VarVal::Int(1.0)) {
+                                atom.path = format!("{}/north", atom.path);
+                                atom.vars.remove("dir");
+                                atom.vars.remove("pixel_y");
+                                atom.vars.remove("name");
+                            }
 
-                        if matches!(atom_cloned.vars["dir"], VarVal::Int(2.0)) {
+                            if matches!(atom_cloned.vars["dir"], VarVal::Int(2.0)) {
+                                atom.path = format!("{}/south", atom.path);
+                                atom.vars.remove("dir");
+                                atom.vars.remove("pixel_y");
+                                atom.vars.remove("name");
+                            }
+                        } else {
                             atom.path = format!("{}/south", atom.path);
                             atom.vars.remove("dir");
                             atom.vars.remove("pixel_y");
                             atom.vars.remove("name");
                         }
-                    } else {
-                        atom.path = format!("{}/south", atom.path);
-                        atom.vars.remove("dir");
-                        atom.vars.remove("pixel_y");
-                        atom.vars.remove("name");
                     }
-                }
-            }
+                } // fix up APCs
 
-            // ----------------------------------------------
-            // fix up air alarms
-            {
-                let atom_cloned = atom.clone();
+                // ----------------------------------------------
+                // fix up air alarms
+                {
+                    let atom_cloned = atom.clone();
 
-                if atom_cloned.path.starts_with("/obj/machinery/alarm") {
-                    let pixel_x = if atom_cloned.vars.contains_key("pixel_x") {
-                        if let VarVal::Int(pixel_x) = atom_cloned.vars["pixel_x"] {
-                            Some(pixel_x)
-                        } else {
-                            None
+                    if atom_cloned.path.starts_with("/obj/machinery/alarm") {
+                        if pixel_x.is_some() && pixel_x.unwrap() < 0.0f64 {
+                            atom.path = format!("{}/west", atom.path);
+                            atom.vars.remove("dir");
+                            atom.vars.remove("pixel_x");
+                            atom.vars.remove("name");
                         }
-                    } else {
-                        None
-                    };
-                    let pixel_y = if atom_cloned.vars.contains_key("pixel_y") {
-                        if let VarVal::Int(pixel_y) = atom_cloned.vars["pixel_y"] {
-                            Some(pixel_y)
-                        } else {
-                            None
+                        if pixel_x.is_some() && pixel_x.unwrap() > 0.0f64 {
+                            atom.path = format!("{}/east", atom.path);
+                            atom.vars.remove("dir");
+                            atom.vars.remove("pixel_x");
+                            atom.vars.remove("name");
                         }
-                    } else {
-                        None
-                    };
-
-                    if pixel_x.is_some() && pixel_x.unwrap() < 0.0f64 {
-                        atom.path = format!("{}/west", atom.path);
-                        atom.vars.remove("dir");
-                        atom.vars.remove("pixel_x");
-                        atom.vars.remove("name");
+                        if pixel_y.is_some() && pixel_y.unwrap() > 0.0f64 {
+                            atom.path = format!("{}/north", atom.path);
+                            atom.vars.remove("dir");
+                            atom.vars.remove("pixel_y");
+                            atom.vars.remove("name");
+                        }
+                        if pixel_y.is_some() && pixel_y.unwrap() < 0.0f64 {
+                            atom.path = format!("{}/south", atom.path);
+                            atom.vars.remove("dir");
+                            atom.vars.remove("pixel_y");
+                            atom.vars.remove("name");
+                        }
                     }
+                } // fix up air alarms
 
-                    // if matches!(atom_cloned.vars["dir"], VarVal::Int(4.0)) {
-                    //     atom.path = format!("{}/east", atom.path);
-                    //     atom.vars.remove("dir");
-                    //     atom.vars.remove("pixel_x");
-                    //     atom.vars.remove("name");
-                    // }
+                // ----------------------------------------------
+                // fire extinguisher cabinets
+                {
+                    let atom_cloned = atom.clone();
 
-                    // if matches!(atom_cloned.vars["dir"], VarVal::Int(1.0)) {
-                    //     atom.path = format!("{}/north", atom.path);
-                    //     atom.vars.remove("dir");
-                    //     atom.vars.remove("pixel_y");
-                    //     atom.vars.remove("name");
-                    // }
+                    if atom_cloned
+                        .path
+                        .starts_with("/obj/structure/extinguisher_cabinet")
+                    {
+                        if pixel_x.is_some() && pixel_x.unwrap() < 0.0f64 {
+                            atom.path = format!("{}/west", atom.path);
+                            atom.vars.remove("dir");
+                            atom.vars.remove("pixel_x");
+                            atom.vars.remove("name");
+                        } else if pixel_x.is_some() && pixel_x.unwrap() > 0.0f64 {
+                            atom.path = format!("{}/east", atom.path);
+                            atom.vars.remove("dir");
+                            atom.vars.remove("pixel_x");
+                            atom.vars.remove("name");
+                        } else if pixel_y.is_some() && pixel_y.unwrap() > 0.0f64 {
+                            atom.path = format!("{}/north", atom.path);
+                            atom.vars.remove("dir");
+                            atom.vars.remove("pixel_y");
+                            atom.vars.remove("name");
+                        } else if pixel_y.is_some() && pixel_y.unwrap() < 0.0f64 {
+                            atom.path = format!("{}/south", atom.path);
+                            atom.vars.remove("dir");
+                            atom.vars.remove("pixel_y");
+                            atom.vars.remove("name");
+                        }
+                    }
+                } // fire extinguisher cabinets
 
-                    // if matches!(atom_cloned.vars["dir"], VarVal::Int(2.0)) {
-                    //     atom.path = format!("{}/south", atom.path);
-                    //     atom.vars.remove("dir");
-                    //     atom.vars.remove("pixel_y");
-                    //     atom.vars.remove("name");
-                    // }
-                }
-            }
-        }
-    }
+                // ----------------------------------------------
+                // fireaxe cabinets
+                {
+                    let atom_cloned = atom.clone();
+
+                    if atom_cloned
+                        .path
+                        .starts_with("/obj/structure/fireaxecabinet")
+                    {
+                        if pixel_x.is_some() && pixel_x.unwrap() < 0.0f64 {
+                            atom.path = format!("{}/west", atom.path);
+                            atom.vars.remove("dir");
+                            atom.vars.remove("pixel_x");
+                            atom.vars.remove("name");
+                        } else if pixel_x.is_some() && pixel_x.unwrap() > 0.0f64 {
+                            atom.path = format!("{}/east", atom.path);
+                            atom.vars.remove("dir");
+                            atom.vars.remove("pixel_x");
+                            atom.vars.remove("name");
+                        } else if pixel_y.is_some() && pixel_y.unwrap() > 0.0f64 {
+                            atom.path = format!("{}/north", atom.path);
+                            atom.vars.remove("dir");
+                            atom.vars.remove("pixel_y");
+                            atom.vars.remove("name");
+                        } else if pixel_y.is_some() && pixel_y.unwrap() < 0.0f64 {
+                            atom.path = format!("{}/south", atom.path);
+                            atom.vars.remove("dir");
+                            atom.vars.remove("pixel_y");
+                            atom.vars.remove("name");
+                        }
+                    }
+                } // fireaxe cabinets
+            } // end of directional stuff
+        } // for atom in &mut prototype.atoms
+    } // for prototype in &mut parsed.prototypes
 
     let printed = print(&parsed);
 
