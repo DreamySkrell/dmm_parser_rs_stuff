@@ -15,6 +15,7 @@ pub enum Token {
     VarPath((String, String)),
     VarList((String, Vec<i32>)),
     VarListString((String, Vec<String>)),
+    VarListStringAssoc((String, Vec<(String, String)>)),
     VarEnd,
 
     RowDefStart(Vec<i32>),
@@ -51,6 +52,7 @@ pub fn lexe(dmm: &str) -> Vec<(usize, Token)> {
 
     for (n, line) in dmm.lines().enumerate().map(|(n, l)| (n + 1, l)) {
         let token = {
+            // dbg!("", n, line);
             if line.starts_with("//") {
                 Token::Comment(line.chars().skip(2).collect())
             } else if line.starts_with("\"}") {
@@ -73,6 +75,19 @@ pub fn lexe(dmm: &str) -> Vec<(usize, Token)> {
                 let name = substr_between(line, "\t", " = ");
                 let val = substr_between(line, "'", "'");
                 Token::VarPath((name.into(), val.into()))
+            } else if line.contains(" = list(\"") && line.contains("\"=\"") {
+                let name = substr_between(line, "\t", " = list(");
+                let val = substr_between(line, "list(", ")")
+                    .split(",")
+                    .map(|s| {
+                        s.split('=')
+                            .map(|s| substr_between(s, "\"", "\""))
+                            .map(|s| s.to_string())
+                            .next_tuple::<(String, String)>()
+                            .unwrap()
+                    })
+                    .collect_vec();
+                Token::VarListStringAssoc((name.into(), val))
             } else if line.contains(" = list(\"") {
                 let name = substr_between(line, "\t", " = list(");
                 let val = substr_between(line, "list(", ")")

@@ -1,3 +1,4 @@
+use crate::dmmr::*;
 use crate::*;
 
 #[test]

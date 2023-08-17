@@ -1,6 +1,8 @@
 use std::str::FromStr;
 use crate::*;
-use crate::lexer::*;
+use crate::dmmr::*;
+use crate::dmmr::lexer::*;
+use crate::dmmr::lexer::Token;
 
 grammar;
 
@@ -22,6 +24,7 @@ extern {
         VarPath => Token::VarPath(<(String, String)>),
         VarList => Token::VarList(<(String, Vec<i32>)>),
         VarListString => Token::VarListString(<(String, Vec<String>)>),
+        VarListStringAssoc => Token::VarListStringAssoc(<(String, Vec<(String, String)>)>),
         VarEnd => Token::VarEnd,
         
         RowDefStart => Token::RowDefStart(<Vec<i32>>),
@@ -41,8 +44,9 @@ Var: (String, VarVal) = {
     <v:VarString>       => ( v.0, VarVal::String(v.1), ),
     <v:VarPath>         => ( v.0, VarVal::Path(v.1), ),
     <v:VarList>         => ( v.0, VarVal::List(v.1), ),
-    <v:VarListString>   => ( v.0, VarVal::ListString(v.1), ),
-    <v:VarNull>         => ( v.0, VarVal::Null, ),
+    <v:VarListString>       => ( v.0, VarVal::ListString(v.1), ),
+    <v:VarListStringAssoc>  => ( v.0, VarVal::ListStringAssoc(v.1), ),
+    <v:VarNull>             => ( v.0, VarVal::Null, ),
 }
 
 Atom: Atom = {
