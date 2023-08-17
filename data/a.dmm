@@ -1,10 +1,16 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
-"aa" = (
-/turf/simulated/floor/plating,
-/area/kataphract_chapter/hangar)
-"ab" = (
+"aB" = (
 /turf/simulated/wall/r_wall,
-/area/kataphract_chapter/bridge)
+/area/kataphract_chapter/bridge1)
+"bC" = (
+/turf/simulated/wall/r_wall,
+/area/kataphract_chapter/bridge2)
+"dE" = (
+/turf/simulated/wall/r_wall,
+/area/kataphract_chapter/bridge3)
+"Fg" = (
+/turf/simulated/wall/r_wall,
+/area/kataphract_chapter/bridge4)
 
 (1,1,1) = {"
 aB

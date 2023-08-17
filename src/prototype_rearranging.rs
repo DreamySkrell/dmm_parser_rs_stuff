@@ -22,7 +22,6 @@ pub fn remap() {
             diff::Result::Left(l) => println!("{} diff - : {}", i, l),
             diff::Result::Both(l, r) => {
                 assert_eq!(l, r);
-                //println!("{} diff   : {}", i, l);
             }
             diff::Result::Right(r) => println!("{} diff + : {}", i, r),
         }

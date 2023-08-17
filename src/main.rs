@@ -12,42 +12,6 @@ use itertools::Itertools;
 use linked_hash_map::LinkedHashMap;
 use std::collections::HashMap;
 
-#[derive(Debug, Clone)]
-pub enum VarVal {
-    String(String),
-    Path(String),
-    Null,
-    Int(f64),
-    List(Vec<i32>),
-    ListString(Vec<String>),
-    ListStringAssoc(Vec<(String, String)>),
-}
-
-#[derive(Debug, Clone)]
-pub struct Atom {
-    path: String,
-    vars: LinkedHashMap<String, VarVal>,
-}
-
-#[derive(Debug, Clone)]
-pub struct Prototype {
-    id: String,
-    atoms: Vec<Atom>,
-}
-
-#[derive(Debug, Clone)]
-pub struct Row {
-    coords: Vec<i32>,
-    tiles: Vec<String>,
-}
-
-#[derive(Debug, Clone)]
-pub struct Dmm {
-    comment: String,
-    prototypes: Vec<Prototype>,
-    rows: Vec<Row>,
-}
-
 fn main() {
     // flip::flip();
     // remap_34::remap();

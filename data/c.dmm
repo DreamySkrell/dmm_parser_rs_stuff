@@ -1,8 +1,8 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
-"aa" = (
-/turf/simulated/floor/plating,
-/area/kataphract_chapter/hangar)
-"ab" = (
+"aB" = (
+/turf/simulated/wall/r_wall,
+/area/kataphract_chapter/bridge1)
+"bC" = (
 /obj/effect/floor_decal/industrial/warning{
 	dir = 4;
 	axu = 6;
@@ -11,6 +11,12 @@
 	icon_state = "warning"
 	},
 /area/kataphract_chapter/bridge)
+"dE" = (
+/turf/simulated/wall/r_wall,
+/area/kataphract_chapter/bridge3)
+"Fg" = (
+/turf/simulated/wall/r_wall,
+/area/kataphract_chapter/bridge4)
 
 (1,1,1) = {"
 aB

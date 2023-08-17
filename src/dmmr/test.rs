@@ -24,8 +24,8 @@ fn parse_compare() {
         // println!("{}", printed);
 
         if original != printed {
-            let left = &original;
-            let right = &printed;
+            let left = &original.clone().replace("\r\n", "\n");
+            let right = &original.clone().replace("\r\n", "\n");
 
             for (i, diff) in diff::lines(left, right).iter().enumerate() {
                 match diff {
@@ -37,13 +37,57 @@ fn parse_compare() {
                     diff::Result::Right(r) => println!("{} diff + : {}", i, r),
                 }
             }
+            assert_eq!(left, right);
         }
 
-        if original != printed {
-            panic!();
-        }
-
-        // assert_eq!(original, printed);
         println!("   ok");
     }
+}
+
+#[test]
+fn unpack_repack() {
+    for dmm in std::fs::read_dir("data").unwrap() {
+        let path = dmm.unwrap().path();
+        println!("-- {}", path.to_str().unwrap());
+        let original = std::fs::read_to_string(path.clone()).unwrap();
+        println!("   read");
+        let parsed = parse(&original);
+        println!("   parsed");
+        let unpacked = unpack(&parsed);
+        println!("   unpacked");
+        let repacked = pack(&unpacked);
+        println!("   repacked");
+        let printed = print(&repacked);
+        println!("   printed");
+
+        if original != printed {
+            let left = &original.clone().replace("\r\n", "\n");
+            let right = &printed.clone().replace("\r\n", "\n");
+
+            // println!("{}", left);
+            // println!("{}", right);
+
+            for (i, diff) in diff::lines(left, right).iter().enumerate() {
+                match diff {
+                    diff::Result::Left(l) => println!("{} diff - : {}", i, l),
+                    diff::Result::Both(l, r) => {
+                        assert_eq!(l, r);
+                        //println!("{} diff   : {}", i, l);
+                    }
+                    diff::Result::Right(r) => println!("{} diff + : {}", i, r),
+                }
+            }
+            // assert_eq!(left, right);
+        }
+
+        std::fs::write(path, printed).unwrap();
+
+        println!("   ok");
+    }
+}
+
+#[test]
+fn ordering() {
+    assert!("a" < "b");
+    assert!("a" > "B");
 }
