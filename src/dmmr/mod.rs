@@ -122,15 +122,33 @@ pub fn pack(umm: &Umm) -> Dmm {
         .iter() //
         .sorted_by(|(a_i, _a_p), (b_i, _b_p)| {
             //
-            let a_char = a_i.chars().next().unwrap();
-            let b_char = b_i.chars().next().unwrap();
-            if a_char.is_uppercase() && b_char.is_lowercase() {
-                std::cmp::Ordering::Greater
-            } else if a_char.is_lowercase() && b_char.is_uppercase() {
-                std::cmp::Ordering::Less
-            } else {
-                Ord::cmp(a_i, b_i)
-            }
+            // let a_char = a_i.chars().next().unwrap();
+            // let b_char = b_i.chars().next().unwrap();
+            // if a_char.is_uppercase() && b_char.is_lowercase() {
+            //     std::cmp::Ordering::Greater
+            // } else if a_char.is_lowercase() && b_char.is_uppercase() {
+            //     std::cmp::Ordering::Less
+            // } else {
+            //     Ord::cmp(a_i, b_i)
+            // }
+            //
+            // Ord::cmp(a_i, b_i)
+            // human_sort::compare(a_i, b_i)
+            let switch_case = |s: &String| {
+                s.chars()
+                    .map(|c| {
+                        if c.is_uppercase() {
+                            c.to_ascii_lowercase()
+                        } else {
+                            c.to_ascii_uppercase()
+                        }
+                    })
+                    .collect::<String>()
+            };
+            let a_i_switched_case = switch_case(a_i);
+            let b_i_switched_case = switch_case(b_i);
+            Ord::cmp(&a_i_switched_case, &b_i_switched_case)
+            //
         })
     {
         dmm.prototypes.push(prototype.clone());
