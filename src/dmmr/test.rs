@@ -80,7 +80,7 @@ fn unpack_repack() {
             // assert_eq!(left, right);
         }
 
-        std::fs::write(path, printed).unwrap();
+        // std::fs::write(path, printed).unwrap();
 
         println!("   ok");
     }
