@@ -14,6 +14,7 @@ use lexer::Token;
 #[derive(Debug, Clone, PartialEq, PartialOrd)]
 pub enum VarVal {
     String(String),
+    Icon(String),
     Path(String),
     Null,
     Int(f64),

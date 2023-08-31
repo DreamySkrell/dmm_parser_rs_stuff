@@ -33,8 +33,11 @@ pub fn print(dmm: &Dmm) -> String {
                         VarVal::String(ss) => {
                             s.push_str(&format!("{}{} = \"{}\"", tabchar(), var.0, ss));
                         }
-                        VarVal::Path(ss) => {
+                        VarVal::Icon(ss) => {
                             s.push_str(&format!("{}{} = '{}'", tabchar(), var.0, ss));
+                        }
+                        VarVal::Path(ss) => {
+                            s.push_str(&format!("{}{} = {}", tabchar(), var.0, ss));
                         }
                         VarVal::Null => {
                             s.push_str(&format!("{}{} = {}", tabchar(), var.0, "null"));

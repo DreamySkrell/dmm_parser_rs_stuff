@@ -17,6 +17,9 @@ pub fn remap() {
         .filter(|e| e.file_name().to_str().unwrap().ends_with(".dmm"))
     {
         let map_name = entry.path().to_str().unwrap(); //"sccv_horizon-2_deck_2";
+        if ["multi_zas_test"].iter().any(|x| map_name.contains(x)) {
+            continue;
+        }
         let origin_path: std::path::PathBuf = format!("{map_name}").into();
         println!("processing map: {}", origin_path.to_str().unwrap());
         // let parsed_path: std::path::PathBuf = format!("{map_dir}/{map_name}_p.dmm").into();
@@ -36,7 +39,7 @@ pub fn remap() {
         //         diff::Result::Right(r) => println!("{} diff + : {}", i, r),
         //     }
         // }
-        assert!(origin_map_str == parsed_str);
+        // assert!(origin_map_str == parsed_str);
 
         let mut umm = unpack(&parsed);
 

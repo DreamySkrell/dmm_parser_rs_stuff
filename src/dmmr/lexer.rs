@@ -12,6 +12,7 @@ pub enum Token {
     VarInt((String, f64)),
     VarNull((String, ())),
     VarString((String, String)),
+    VarIcon((String, String)),
     VarPath((String, String)),
     VarList((String, Vec<i32>)),
     VarListString((String, Vec<String>)),
@@ -80,7 +81,11 @@ pub fn lexe(dmm: &str) -> Vec<(usize, Token)> {
                 Token::VarString((name.into(), val.into()))
             } else if line.contains(" = '") {
                 let name = substr_between(line, "\t", " = ");
-                let val = substr_between(line, "'", "'");
+                let val: &str = substr_between(line, "'", "'");
+                Token::VarIcon((name.into(), val.into()))
+            } else if line.contains(" = /") {
+                let name = substr_between(line, "\t", " = ");
+                let val = substr_between(line, " = ", ";");
                 Token::VarPath((name.into(), val.into()))
             } else if line.contains(" = list(\"") && line.contains("\"=\"") {
                 let name = substr_between(line, "\t", " = list(");
@@ -110,7 +115,7 @@ pub fn lexe(dmm: &str) -> Vec<(usize, Token)> {
                     // .map(|s| substr_between(s, "\"", "\""))
                     .map(|s| s.to_string())
                     .collect_vec();
-                Token::VarListString((name.into(), val))
+                Token::VarListPath((name.into(), val))
             } else if line.contains(" = list(") {
                 let name = substr_between(line, "\t", " = list(");
                 let val = substr_between(line, "list(", ")");
@@ -130,6 +135,8 @@ pub fn lexe(dmm: &str) -> Vec<(usize, Token)> {
                     val.parse::<f64>().expect(&format!("line: {line}")),
                 ))
             } else if line.contains("},") {
+                Token::VarEnd
+            } else if line.contains("})") {
                 Token::VarEnd
             } else if line.len() == prototype_len {
                 Token::PrototypeId(line.into())
