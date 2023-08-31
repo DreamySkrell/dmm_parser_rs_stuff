@@ -108,7 +108,7 @@ pub fn pack(umm: &Umm) -> Dmm {
             prototype_ids_taken.insert(tile.id.clone());
         }
         let id_chars: Vec<char> = ('a'..'z')
-            .chain('A'..'Z') /*.chain('0'..'9')*/
+            // .chain('A'..'Z') /*.chain('0'..'9')*/
             .collect();
         match umm.grid.iter().next().unwrap().id.chars().count() {
             1 => {

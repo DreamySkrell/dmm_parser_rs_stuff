@@ -56,25 +56,121 @@ pub fn remap() {
                 // per atom changes
                 for atom in prototypes.atoms.iter_mut() {
                     // floors
-                    // if ["/turf/unsimulated/floor"].iter().any(|x| *x == atom.path) {
-                    //     if let Some(dmmr::VarVal::String(icon_state)) = atom.vars.get("icon_state")
-                    //     {
-                    //         let mut new_icon_state = None;
-                    //         for (a, b) in
-                    //             [("tiles", "tiled_preview"), ("steel_dirty", "tiled_preview")]
-                    //         {
-                    //             if icon_state == a {
-                    //                 new_icon_state = Some(b);
-                    //             }
-                    //         }
-                    //         if new_icon_state.is_some() {
-                    //             atom.vars.insert(
-                    //                 "icon_state".to_string(),
-                    //                 dmmr::VarVal::String(new_icon_state.unwrap().into()),
-                    //             );
-                    //         }
-                    //     }
-                    // }
+                    if ["/turf/unsimulated/floor"].iter().any(|x| *x == atom.path) {
+                        if let Some(dmmr::VarVal::String(icon_state)) = atom.vars.get("icon_state")
+                        {
+                            let mut new_icon_state = None;
+                            for (a, b) in [
+                                ("tiles", "tiled_preview"),
+                                ("steel_dirty", "tiled_preview"),
+                                ("platingdmg1", "tiled_preview"),
+                                ("platingdmg2", "tiled_preview"),
+                                ("platingdmg3", "tiled_preview"),
+                                ("rampbottom", "tiled_preview"),
+                                ("carpet5-1", "tiled_preview"),
+                                ("floorscorched1", "tiled_preview"),
+                                ("new_reinforced", "tiled_preview"),
+                                ("bar", "tiled_preview"),
+                                ("dark2", "dark_preview"),
+                                ("wood_light", "wood_preview"),
+                                ("carpet13-5", "carpet"),
+                                ("lino_grey", "tiled_preview"),
+                                ("brown", "tiled_preview"),
+                                ("platingdmg2", "tiled_preview"),
+                                ("freezerfloor", "freezer"),
+                                ("new_white", "white"),
+                                ("carpetside", "carpet"),
+                                ("carpet6-2", "carpet"),
+                                ("carpetnoconnect", "carpet"),
+                                ("wood-broken", "wood_preview"),
+                                ("cafeteria", "wood_preview"),
+                                ("floor", "tiled_preview"),
+                                ("floor3", "tiled_preview"),
+                                ("engine", "tiled_preview"),
+                                ("platebot", "tiled_preview"),
+                            ] {
+                                if icon_state == a {
+                                    new_icon_state = Some(b);
+                                }
+                            }
+                            if new_icon_state.is_some() {
+                                atom.vars.insert(
+                                    "icon_state".to_string(),
+                                    dmmr::VarVal::String(new_icon_state.unwrap().into()),
+                                );
+                            }
+                        }
+                    }
+
+                    // light
+                    if ["/obj/machinery/light"].iter().any(|x| *x == atom.path) {
+                        if let Some(dmmr::VarVal::String(icon_state)) = atom.vars.get("icon_state")
+                        {
+                            let mut new_icon_state = None;
+                            for (a, b) in [("tube1", "tube_empty")] {
+                                if icon_state == a {
+                                    new_icon_state = Some(b);
+                                }
+                            }
+                            if new_icon_state.is_some() {
+                                atom.vars.insert(
+                                    "icon_state".to_string(),
+                                    dmmr::VarVal::String(new_icon_state.unwrap().into()),
+                                );
+                            }
+                        }
+                    }
+                }
+
+                // door dirs
+                {
+                    let prototypes_cloned = umm.grid.get(row, col).unwrap().clone();
+
+                    let is_turf_floor = |a: &Atom| a.path.starts_with("/turf/simulated/floor");
+                    let north_turf_floor = umm
+                        .grid
+                        .get(row + 1, col)
+                        .unwrap()
+                        .atoms
+                        .iter()
+                        .any(is_turf_floor);
+                    let south_turf_floor = umm
+                        .grid
+                        .get(row - 1, col)
+                        .unwrap()
+                        .atoms
+                        .iter()
+                        .any(is_turf_floor);
+                    let east_turf_floor = umm
+                        .grid
+                        .get(row, col + 1)
+                        .unwrap()
+                        .atoms
+                        .iter()
+                        .any(is_turf_floor);
+                    let west_turf_floor = umm
+                        .grid
+                        .get(row, col - 1)
+                        .unwrap()
+                        .atoms
+                        .iter()
+                        .any(is_turf_floor);
+
+                    let prototypes = umm.grid.get_mut(row, col).unwrap();
+
+                    for atom in prototypes.atoms.iter_mut() {
+                        if atom.path.starts_with("/obj/machinery/door/airlock")
+                            && !atom.path.contains("multi_tile")
+                        {
+                            if north_turf_floor && south_turf_floor {
+                                atom.vars
+                                    .insert("dir".to_string(), dmmr::VarVal::Int(4.0f64));
+                            } else if east_turf_floor && west_turf_floor {
+                                atom.vars
+                                    .insert("dir".to_string(), dmmr::VarVal::Int(1.0f64));
+                            }
+                        }
+                    }
                 }
             }
         }
