@@ -30,16 +30,16 @@ pub fn remap() {
 
         let parsed_str = print(&parsed);
         // std::fs::write(parsed_path, parsed_str.clone()).unwrap();
-        // for (i, diff) in diff::lines(&origin_map_str, &parsed_str).iter().enumerate() {
-        //     match diff {
-        //         diff::Result::Left(l) => println!("{} diff - : {}", i, l),
-        //         diff::Result::Both(l, r) => {
-        //             assert_eq!(l, r);
-        //         }
-        //         diff::Result::Right(r) => println!("{} diff + : {}", i, r),
-        //     }
-        // }
-        // assert!(origin_map_str == parsed_str);
+        for (i, diff) in diff::lines(&origin_map_str, &parsed_str).iter().enumerate() {
+            match diff {
+                diff::Result::Left(l) => println!("{} diff - : {}", i, l),
+                diff::Result::Both(l, r) => {
+                    assert_eq!(l, r);
+                }
+                diff::Result::Right(r) => println!("{} diff + : {}", i, r),
+            }
+        }
+        assert!(origin_map_str == parsed_str);
 
         let mut umm = unpack(&parsed);
 
@@ -56,25 +56,25 @@ pub fn remap() {
                 // per atom changes
                 for atom in prototypes.atoms.iter_mut() {
                     // floors
-                    if ["/turf/unsimulated/floor"].iter().any(|x| *x == atom.path) {
-                        if let Some(dmmr::VarVal::String(icon_state)) = atom.vars.get("icon_state")
-                        {
-                            let mut new_icon_state = None;
-                            for (a, b) in
-                                [("tiles", "tiled_preview"), ("steel_dirty", "tiled_preview")]
-                            {
-                                if icon_state == a {
-                                    new_icon_state = Some(b);
-                                }
-                            }
-                            if new_icon_state.is_some() {
-                                atom.vars.insert(
-                                    "icon_state".to_string(),
-                                    dmmr::VarVal::String(new_icon_state.unwrap().into()),
-                                );
-                            }
-                        }
-                    }
+                    // if ["/turf/unsimulated/floor"].iter().any(|x| *x == atom.path) {
+                    //     if let Some(dmmr::VarVal::String(icon_state)) = atom.vars.get("icon_state")
+                    //     {
+                    //         let mut new_icon_state = None;
+                    //         for (a, b) in
+                    //             [("tiles", "tiled_preview"), ("steel_dirty", "tiled_preview")]
+                    //         {
+                    //             if icon_state == a {
+                    //                 new_icon_state = Some(b);
+                    //             }
+                    //         }
+                    //         if new_icon_state.is_some() {
+                    //             atom.vars.insert(
+                    //                 "icon_state".to_string(),
+                    //                 dmmr::VarVal::String(new_icon_state.unwrap().into()),
+                    //             );
+                    //         }
+                    //     }
+                    // }
                 }
             }
         }
