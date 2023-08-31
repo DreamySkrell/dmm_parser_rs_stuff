@@ -25,6 +25,7 @@ extern {
         VarList => Token::VarList(<(String, Vec<i32>)>),
         VarListString => Token::VarListString(<(String, Vec<String>)>),
         VarListStringAssoc => Token::VarListStringAssoc(<(String, Vec<(String, String)>)>),
+        VarListPath => Token::VarListPath(<(String, Vec<String>)>),
         VarEnd => Token::VarEnd,
         
         RowDefStart => Token::RowDefStart(<Vec<i32>>),
@@ -46,6 +47,7 @@ Var: (String, VarVal) = {
     <v:VarList>         => ( v.0, VarVal::List(v.1), ),
     <v:VarListString>       => ( v.0, VarVal::ListString(v.1), ),
     <v:VarListStringAssoc>  => ( v.0, VarVal::ListStringAssoc(v.1), ),
+    <v:VarListPath>       => ( v.0, VarVal::ListPath(v.1), ),
     <v:VarNull>             => ( v.0, VarVal::Null, ),
 }
 

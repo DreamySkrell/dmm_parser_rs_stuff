@@ -20,6 +20,7 @@ pub enum VarVal {
     List(Vec<i32>),
     ListString(Vec<String>),
     ListStringAssoc(Vec<(String, String)>),
+    ListPath(Vec<String>),
 }
 
 #[derive(Debug, Clone, PartialEq, PartialOrd)]
@@ -109,7 +110,22 @@ pub fn pack(umm: &Umm) -> Dmm {
             .chain('A'..'Z') /*.chain('0'..'9')*/
             .collect();
         match umm.grid.iter().next().unwrap().id.chars().count() {
-            2 => panic!(),
+            1 => {
+                for a in id_chars.iter() {
+                    let id: String = [*a].iter().collect();
+                    if !prototype_ids_taken.contains(&id) {
+                        prototype_ids_free.insert(id);
+                    }
+                }
+            }
+            2 => {
+                for (a, b) in id_chars.iter().cartesian_product(id_chars.iter()) {
+                    let id: String = [*a, *b].iter().collect();
+                    if !prototype_ids_taken.contains(&id) {
+                        prototype_ids_free.insert(id);
+                    }
+                }
+            }
             3 => {
                 for ((a, b), c) in id_chars
                     .iter()

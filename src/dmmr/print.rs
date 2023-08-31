@@ -80,6 +80,17 @@ pub fn print(dmm: &Dmm) -> String {
                                     .collect::<String>()
                             ));
                         }
+                        VarVal::ListPath(l) => {
+                            s.push_str(&format!(
+                                "{}{} = list({})",
+                                tabchar(),
+                                var.0,
+                                l.iter()
+                                    .map(|i| i.to_string())
+                                    .intersperse(",".into())
+                                    .collect::<String>()
+                            ));
+                        }
                     }
 
                     if ii < atom.vars.len() - 1 {

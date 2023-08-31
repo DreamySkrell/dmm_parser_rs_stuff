@@ -8,7 +8,7 @@ use crate::dmmr::*;
 use crate::*;
 
 pub fn remap() {
-    let map_dir = "D:/Git/Aurora.3/maps/sccv_horizon".to_string();
+    let map_dir = "D:/Git/Aurora.3/maps".to_string();
 
     for entry in WalkDir::new(map_dir.clone())
         .into_iter()
@@ -54,15 +54,21 @@ pub fn remap() {
                 for atom in prototypes.atoms.iter_mut() {
                     // floors
                     if ["/turf/unsimulated/floor"].iter().any(|x| *x == atom.path) {
-                        if let Some(dmmr::VarVal::Path(icon)) = atom.vars.get("icon") {
-                            if let Some(dmmr::VarVal::String(icon_state)) =
-                                atom.vars.get("icon_state")
+                        if let Some(dmmr::VarVal::String(icon_state)) = atom.vars.get("icon_state")
+                        {
+                            let mut new_icon_state = None;
+                            for (a, b) in
+                                [("tiles", "tiled_preview"), ("steel_dirty", "tiled_preview")]
                             {
-                                if icon == "icons/turf/flooring/tiles.dmi" && icon_state == "tiles"
-                                {
-                                    atom.vars
-                                        .insert("dir".to_string(), dmmr::VarVal::Int(8.0f64));
+                                if icon_state == a {
+                                    new_icon_state = Some(b);
                                 }
+                            }
+                            if new_icon_state.is_some() {
+                                atom.vars.insert(
+                                    "icon_state".to_string(),
+                                    dmmr::VarVal::String(new_icon_state.unwrap().into()),
+                                );
                             }
                         }
                     }
