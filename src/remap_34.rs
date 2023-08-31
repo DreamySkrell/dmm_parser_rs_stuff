@@ -7,7 +7,8 @@ use crate::*;
 
 pub fn remap() {
     let map_dir = "D:/Git/Aurora.3.kyres1/maps/sccv_horizon".to_string();
-    let map_name = "sccv_horizon-2_deck_2";
+    let deck = 3;
+    let map_name = format!("sccv_horizon-{deck}_deck_{deck}");
     let origin_path: std::path::PathBuf = format!("{map_dir}/{map_name}.dmm").into();
     let parsed_path: std::path::PathBuf = format!("{map_dir}/{map_name}_p.dmm").into();
     let result_path: std::path::PathBuf = format!("{map_dir}/{map_name}_r.dmm").into();
@@ -123,100 +124,45 @@ pub fn remap() {
                 } // fix up APCs
 
                 // ----------------------------------------------
-                // fix up air alarms
+                // fix up a whole lot of stuff
                 {
-                    let atom_cloned = atom.clone();
+                    let blacklist = ["/obj/machinery/ringer_button"];
+                    for fixable in [
+                        "/obj/machinery/alarm",
+                        "/obj/structure/extinguisher_cabinet",
+                        "/obj/structure/fireaxecabinet",
+                        "/obj/item/device/radio/intercom",
+                        "/obj/machinery/ringer",
+                        "/obj/machinery/requests_console",
+                        "/obj/machinery/newscaster",
+                    ] {
+                        let atom_cloned = atom.clone();
 
-                    if atom_cloned.path.starts_with("/obj/machinery/alarm") {
-                        if pixel_x.is_some() && pixel_x.unwrap() < 0.0f64 {
-                            atom.path = format!("{}/west", atom.path);
-                            atom.vars.remove("dir");
-                            atom.vars.remove("pixel_x");
-                            atom.vars.remove("name");
-                        } else if pixel_x.is_some() && pixel_x.unwrap() > 0.0f64 {
-                            atom.path = format!("{}/east", atom.path);
-                            atom.vars.remove("dir");
-                            atom.vars.remove("pixel_x");
-                            atom.vars.remove("name");
-                        } else if pixel_y.is_some() && pixel_y.unwrap() > 0.0f64 {
-                            atom.path = format!("{}/north", atom.path);
-                            atom.vars.remove("dir");
-                            atom.vars.remove("pixel_y");
-                            atom.vars.remove("name");
-                        } else if pixel_y.is_some() && pixel_y.unwrap() < 0.0f64 {
-                            atom.path = format!("{}/south", atom.path);
-                            atom.vars.remove("dir");
-                            atom.vars.remove("pixel_y");
-                            atom.vars.remove("name");
+                        if blacklist.iter().any(|a| *a == atom_cloned.path) {
+                            continue;
+                        }
+
+                        if atom_cloned.path.starts_with(fixable) {
+                            if pixel_x.is_some() && pixel_x.unwrap() < 0.0f64 {
+                                atom.path = format!("{}/west", atom.path);
+                                atom.vars.remove("dir");
+                                atom.vars.remove("pixel_x");
+                            } else if pixel_x.is_some() && pixel_x.unwrap() > 0.0f64 {
+                                atom.path = format!("{}/east", atom.path);
+                                atom.vars.remove("dir");
+                                atom.vars.remove("pixel_x");
+                            } else if pixel_y.is_some() && pixel_y.unwrap() > 0.0f64 {
+                                atom.path = format!("{}/north", atom.path);
+                                atom.vars.remove("dir");
+                                atom.vars.remove("pixel_y");
+                            } else if pixel_y.is_some() && pixel_y.unwrap() < 0.0f64 {
+                                atom.path = format!("{}/south", atom.path);
+                                atom.vars.remove("dir");
+                                atom.vars.remove("pixel_y");
+                            }
                         }
                     }
-                } // fix up air alarms
-
-                // ----------------------------------------------
-                // fire extinguisher cabinets
-                {
-                    let atom_cloned = atom.clone();
-
-                    if atom_cloned
-                        .path
-                        .starts_with("/obj/structure/extinguisher_cabinet")
-                    {
-                        if pixel_x.is_some() && pixel_x.unwrap() < 0.0f64 {
-                            atom.path = format!("{}/west", atom.path);
-                            atom.vars.remove("dir");
-                            atom.vars.remove("pixel_x");
-                            atom.vars.remove("name");
-                        } else if pixel_x.is_some() && pixel_x.unwrap() > 0.0f64 {
-                            atom.path = format!("{}/east", atom.path);
-                            atom.vars.remove("dir");
-                            atom.vars.remove("pixel_x");
-                            atom.vars.remove("name");
-                        } else if pixel_y.is_some() && pixel_y.unwrap() > 0.0f64 {
-                            atom.path = format!("{}/north", atom.path);
-                            atom.vars.remove("dir");
-                            atom.vars.remove("pixel_y");
-                            atom.vars.remove("name");
-                        } else if pixel_y.is_some() && pixel_y.unwrap() < 0.0f64 {
-                            atom.path = format!("{}/south", atom.path);
-                            atom.vars.remove("dir");
-                            atom.vars.remove("pixel_y");
-                            atom.vars.remove("name");
-                        }
-                    }
-                } // fire extinguisher cabinets
-
-                // ----------------------------------------------
-                // fireaxe cabinets
-                {
-                    let atom_cloned = atom.clone();
-
-                    if atom_cloned
-                        .path
-                        .starts_with("/obj/structure/fireaxecabinet")
-                    {
-                        if pixel_x.is_some() && pixel_x.unwrap() < 0.0f64 {
-                            atom.path = format!("{}/west", atom.path);
-                            atom.vars.remove("dir");
-                            atom.vars.remove("pixel_x");
-                            atom.vars.remove("name");
-                        } else if pixel_x.is_some() && pixel_x.unwrap() > 0.0f64 {
-                            atom.path = format!("{}/east", atom.path);
-                            atom.vars.remove("dir");
-                            atom.vars.remove("pixel_x");
-                            atom.vars.remove("name");
-                        } else if pixel_y.is_some() && pixel_y.unwrap() > 0.0f64 {
-                            atom.path = format!("{}/north", atom.path);
-                            atom.vars.remove("dir");
-                            atom.vars.remove("pixel_y");
-                            atom.vars.remove("name");
-                        } else if pixel_y.is_some() && pixel_y.unwrap() < 0.0f64 {
-                            atom.path = format!("{}/south", atom.path);
-                            atom.vars.remove("dir");
-                            atom.vars.remove("pixel_y");
-                            atom.vars.remove("name");
-                        }
-                    }
-                } // fireaxe cabinets
+                } // fix up a whole lot of stuff
             } // end of directional stuff
         } // for atom in &mut prototype.atoms
     } // for prototype in &mut parsed.prototypes

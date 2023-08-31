@@ -4,8 +4,9 @@
 
 mod dmmr;
 
+mod all_map_runner;
+mod door_fixing;
 mod flip;
-mod prototype_rearranging;
 mod remap_34;
 
 use itertools::Itertools;
@@ -15,5 +16,6 @@ use std::collections::HashMap;
 fn main() {
     // flip::flip();
     // remap_34::remap();
-    prototype_rearranging::remap();
+    // door_fixing::remap();
+    all_map_runner::remap();
 }

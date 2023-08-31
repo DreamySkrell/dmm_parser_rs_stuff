@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
 pub use super::*;
 
@@ -11,7 +11,7 @@ use lexer::Token;
 
 // ----------------------------------------- types:
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
 pub enum VarVal {
     String(String),
     Path(String),
@@ -22,13 +22,13 @@ pub enum VarVal {
     ListStringAssoc(Vec<(String, String)>),
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
 pub struct Atom {
     pub path: String,
     pub vars: LinkedHashMap<String, VarVal>,
 }
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, PartialEq, PartialOrd)]
 pub struct Prototype {
     pub id: String,
     pub atoms: Vec<Atom>,
@@ -98,11 +98,41 @@ pub fn pack(umm: &Umm) -> Dmm {
         rows: Vec::new(),
     };
 
+    // find all taken prototype ids
+    let mut prototype_ids_taken = BTreeSet::<String>::new();
+    let mut prototype_ids_free = BTreeSet::<String>::new();
+    {
+        for tile in umm.grid.iter() {
+            prototype_ids_taken.insert(tile.id.clone());
+        }
+        let id_chars: Vec<char> = ('a'..'z')
+            .chain('A'..'Z') /*.chain('0'..'9')*/
+            .collect();
+        match umm.grid.iter().next().unwrap().id.chars().count() {
+            2 => panic!(),
+            3 => {
+                for ((a, b), c) in id_chars
+                    .iter()
+                    .cartesian_product(id_chars.iter())
+                    .cartesian_product(id_chars.iter())
+                {
+                    let id: String = [*a, *b, *c].iter().collect();
+                    if !prototype_ids_taken.contains(&id) {
+                        prototype_ids_free.insert(id);
+                    }
+                }
+            }
+            _ => panic!(),
+        }
+    }
+
+    //
     let mut prototypes = BTreeMap::<String, Prototype>::new();
 
     let rows = umm.grid.rows();
     let cols = umm.grid.cols();
 
+    // collect tiles into dmm and write prototypes to map
     dmm.rows.resize(rows, Row::default());
     for (row_i, row) in dmm.rows.iter_mut().enumerate() {
         row.tiles.resize(cols, "".to_string());
@@ -113,27 +143,25 @@ pub fn pack(umm: &Umm) -> Dmm {
                 prototypes.insert(prototype_at_tile.id.clone(), prototype_at_tile.clone());
                 *col = prototype_at_tile.id.clone();
             } else {
-                *col = prototype_at_tile.id.clone();
+                let prototype_in_map = prototypes.get(&prototype_at_tile.id).unwrap().clone();
+                if prototype_in_map == *prototype_at_tile {
+                    *col = prototype_at_tile.id.clone();
+                } else {
+                    let new_id = prototype_ids_free.iter().next().unwrap().clone();
+                    prototype_ids_free.remove(&new_id);
+                    let mut new_prototype = prototype_at_tile.clone();
+                    new_prototype.id = new_id.clone();
+                    prototypes.insert(new_prototype.id.clone(), new_prototype.clone());
+                    *col = new_id.clone();
+                }
             }
         }
     }
 
+    // collect prototypes from map into dmm
     for (_id, prototype) in prototypes
         .iter() //
         .sorted_by(|(a_i, _a_p), (b_i, _b_p)| {
-            //
-            // let a_char = a_i.chars().next().unwrap();
-            // let b_char = b_i.chars().next().unwrap();
-            // if a_char.is_uppercase() && b_char.is_lowercase() {
-            //     std::cmp::Ordering::Greater
-            // } else if a_char.is_lowercase() && b_char.is_uppercase() {
-            //     std::cmp::Ordering::Less
-            // } else {
-            //     Ord::cmp(a_i, b_i)
-            // }
-            //
-            // Ord::cmp(a_i, b_i)
-            // human_sort::compare(a_i, b_i)
             let switch_case = |s: &String| {
                 s.chars()
                     .map(|c| {
