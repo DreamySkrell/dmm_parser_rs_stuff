@@ -19,5 +19,6 @@ fn main() {
     // remap_34::remap();
     // door_fixing::remap();
     // all_map_runner::remap();
-    generate::generate_1();
+    generate::generate_dungen();
+    generate::generate_erebos();
 }
