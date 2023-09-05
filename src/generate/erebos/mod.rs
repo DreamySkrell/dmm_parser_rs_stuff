@@ -1,8 +1,8 @@
 mod common;
-mod crawler;
-mod debug;
-mod graph;
-mod map;
+pub mod crawler;
+pub mod debug;
+pub mod graph;
+pub mod map;
 
 use graph::MapGraph;
 use map::room_templates;

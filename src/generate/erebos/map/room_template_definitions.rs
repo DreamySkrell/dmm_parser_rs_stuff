@@ -173,6 +173,63 @@ pub fn big_big_square() -> RoomTemplate {
   }
 }
 
+pub fn hangar() -> RoomTemplate {
+  let template = vec![
+    1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, //
+    1, 8, 8, 8, 8, 8, 8, 8, 8, 8, 1, //
+    1, 8, 8, 8, 8, 8, 8, 8, 8, 8, 1, //
+    1, 8, 8, 8, 8, 8, 8, 8, 8, 8, 1, //
+    1, 8, 8, 8, 8, 8, 8, 8, 8, 8, 1, //
+    1, 8, 8, 8, 8, 8, 8, 8, 8, 8, 1, //
+    1, 8, 8, 8, 8, 8, 8, 8, 8, 8, 1, //
+    1, 8, 8, 8, 8, 8, 8, 8, 8, 8, 1, //
+    1, 8, 8, 8, 8, 8, 8, 8, 8, 8, 1, //
+    1, 8, 8, 8, 8, 8, 8, 8, 8, 8, 1, //
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, //
+  ];
+
+  let width: i32 = 11;
+  let tiles = calculate_door_tiles(template, width);
+  let doors_xy = calculate_doors_xy(&tiles, width);
+
+  RoomTemplate {
+    h: tiles.len() as i32 / width,
+    w: width,
+    tiles,
+    possible_doors_xy: doors_xy,
+    room_type: RoomType::Start,
+    ..Default::default()
+  }
+}
+
+pub fn straight_corridor() -> RoomTemplate {
+  let template = vec![
+    1, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, //
+    1, 8, 8, 1, 0, 0, 0, 0, 0, 0, 0, //
+    1, 8, 8, 1, 0, 0, 0, 0, 0, 0, 0, //
+    1, 8, 8, 1, 0, 0, 0, 0, 0, 0, 0, //
+    1, 8, 8, 1, 0, 0, 0, 0, 0, 0, 0, //
+    1, 8, 8, 1, 0, 0, 0, 0, 0, 0, 0, //
+    1, 8, 8, 1, 0, 0, 0, 0, 0, 0, 0, //
+    1, 8, 8, 1, 0, 0, 0, 0, 0, 0, 0, //
+    1, 8, 8, 1, 0, 0, 0, 0, 0, 0, 0, //
+    1, 8, 8, 1, 0, 0, 0, 0, 0, 0, 0, //
+    1, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, //
+  ];
+
+  let width: i32 = 11;
+  let tiles = calculate_door_tiles(template, width);
+  let doors_xy = calculate_doors_xy(&tiles, width);
+
+  RoomTemplate {
+    h: tiles.len() as i32 / width,
+    w: width,
+    tiles,
+    possible_doors_xy: doors_xy,
+    ..Default::default()
+  }
+}
+
 pub fn bent_l() -> RoomTemplate {
   let template = vec![
     1, 2, 2, 2, 1, 0, //

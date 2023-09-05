@@ -7,6 +7,7 @@ mod erebos;
 use crate::dmmr::{self, pack, print, Atom, Prototype, Umm};
 use grid::Grid;
 use linked_hash_map::LinkedHashMap;
+use petgraph::stable_graph::{NodeIndex, StableGraph};
 use rand::{thread_rng, Rng};
 
 pub fn generate_dungen() {
@@ -106,10 +107,57 @@ pub fn generate_dungen() {
     std::fs::write(map_name, result_str).unwrap();
 }
 
+fn make_graph() -> erebos::graph::MapGraph {
+    let mut graph = StableGraph::from_edges([
+        (0, 1),
+        (1, 2),
+        (2, 3),
+        (3, 4),
+        (4, 5),
+        (5, 6),
+        (6, 7),
+        (7, 8),
+        (8, 16),
+        (16, 17),
+        (17, 18),
+        (18, 19),
+        //
+        (5, 9),
+        (9, 10),
+        (10, 11),
+        (11, 12),
+        //
+        (0, 13),
+        (13, 14),
+        (14, 15),
+        //
+        (19, 12),
+    ]);
+    for (i, weight) in graph.node_weights_mut().enumerate() {
+        *weight = i + 1;
+    }
+    let nodes: Vec<NodeIndex<u32>> = graph.node_indices().collect();
+    let neighbour_map = erebos::graph::create_neighbour_map((graph.clone(), nodes.clone()));
+    erebos::graph::MapGraph {
+        graph,
+        nodes,
+        neighbour_map,
+    }
+}
+
 pub fn generate_erebos() {
-    let dungeon_size = 50;
-    let map_graph = erebos::random_graph();
-    let mut dungeon = erebos::generate_map(&map_graph, (dungeon_size as i32, dungeon_size as i32));
+    let dungeon_size = 200;
+    // let map_graph = erebos::random_graph();
+    let map_graph = make_graph();
+    let mut dungeon = loop {
+        let dungeon = erebos::generate_map(&map_graph, (dungeon_size as i32, dungeon_size as i32));
+        dbg!(dungeon.rooms.len(), map_graph.nodes.len());
+        if dungeon.rooms.len() >= map_graph.nodes.len() - 1 {
+            break dungeon;
+        }
+        // println!("-------------------");
+        // println!("regenerating map...");
+    };
 
     let map_dir = "D:/Git/Aurora.3/maps/sccv_horizon".to_string();
     let map_name = map_dir + "/" + "dungeon_erebos" + ".dmm";

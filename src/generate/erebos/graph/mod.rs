@@ -13,6 +13,7 @@ use std::collections::HashMap;
 pub type NeighbourMap = HashMap<usize, Vec<(NodeIndex<u32>, NodeIndex<u32>)>>;
 pub type GraphResult = (StableGraph<usize, usize>, Vec<NodeIndex<u32>>);
 
+#[derive(Debug)]
 pub struct MapGraph {
   pub graph: StableGraph<usize, usize>,
   pub nodes: Vec<NodeIndex<u32>>,
@@ -90,7 +91,7 @@ pub fn random_graph() -> MapGraph {
 }
 
 /// For each node, store the directional neighbours (incoming and outgoing)
-fn create_neighbour_map((graph, nodes): GraphResult) -> NeighbourMap {
+pub fn create_neighbour_map((graph, nodes): GraphResult) -> NeighbourMap {
   let mut neighbour_map: NeighbourMap = HashMap::new();
 
   for node_a in nodes.iter() {

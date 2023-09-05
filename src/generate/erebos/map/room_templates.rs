@@ -30,23 +30,26 @@ impl RoomTemplates {
     let mut rooms: RoomTemplateMap = HashMap::new();
 
     for (num, template) in Vec::from([
-      // definitions::bent_l(),
-      // definitions::bent_r(),
       definitions::big_square(),
       definitions::big_big_square(),
-      // definitions::boss_room(),
-      // definitions::cross(),
-      // definitions::jar(),
-      // definitions::l_bottom_left_shape(),
-      // definitions::l_bottom_right_shape(),
-      // definitions::l_top_left_shape(),
-      // definitions::l_top_right_shape(),
-      // definitions::long_shape(),
+      definitions::hangar(),
+      definitions::straight_corridor(),
+      definitions::long_shape(),
       definitions::rectangle(),
       definitions::small_square(),
-      definitions::start_room(),
-      // definitions::tall(),
-      // definitions::wide(),
+      definitions::tall(),
+      definitions::wide(),
+      //
+      definitions::bent_l(),
+      definitions::bent_r(),
+      definitions::boss_room(),
+      definitions::cross(),
+      definitions::jar(),
+      definitions::l_bottom_left_shape(),
+      definitions::l_bottom_right_shape(),
+      definitions::l_top_left_shape(),
+      definitions::l_top_right_shape(),
+      // definitions::start_room(),
     ])
     .iter()
     .enumerate()
