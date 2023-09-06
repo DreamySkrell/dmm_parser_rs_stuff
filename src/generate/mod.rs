@@ -146,6 +146,10 @@ fn make_graph() -> erebos::graph::MapGraph {
         (13, 25),
         (17, 26),
         (6, 27),
+        //
+        (5, 28),
+        (5, 29),
+        (5, 30),
     ]);
     for (i, weight) in graph.node_weights_mut().enumerate() {
         *weight = i + 1;
