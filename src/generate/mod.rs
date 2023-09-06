@@ -1,13 +1,19 @@
 #![allow(unused_mut)]
 #![allow(unused_variables)]
+#![allow(unused_must_use)]
 
 mod dungen;
 mod erebos;
 
+use std::ops::Deref;
+
 use crate::dmmr::{self, pack, print, Atom, Prototype, Umm};
 use grid::Grid;
 use linked_hash_map::LinkedHashMap;
-use petgraph::stable_graph::{NodeIndex, StableGraph};
+use petgraph::{
+    stable_graph::{NodeIndex, StableGraph},
+    visit::{EdgeRef, IntoEdgeReferences},
+};
 use rand::{thread_rng, Rng};
 
 pub fn generate_dungen() {
@@ -131,7 +137,6 @@ fn make_graph() -> erebos::graph::MapGraph {
         (13, 14),
         (14, 15),
         //
-        (19, 12),
     ]);
     for (i, weight) in graph.node_weights_mut().enumerate() {
         *weight = i + 1;
@@ -146,17 +151,41 @@ fn make_graph() -> erebos::graph::MapGraph {
 }
 
 pub fn generate_erebos() {
-    let dungeon_size = 200;
+    let dungeon_size = 100;
     // let map_graph = erebos::random_graph();
     let map_graph = make_graph();
     let mut dungeon = loop {
         let dungeon = erebos::generate_map(&map_graph, (dungeon_size as i32, dungeon_size as i32));
-        dbg!(dungeon.rooms.len(), map_graph.nodes.len());
-        if dungeon.rooms.len() >= map_graph.nodes.len() - 1 {
+        let edges_count = map_graph.graph.edge_count();
+        let edges_satisfied = {
+            map_graph
+                .graph
+                .edge_references()
+                .map(|edge| (edge.source(), edge.target()))
+                .map(|(a, b)| (a.index(), b.index()))
+                .filter(|(a1, b1)| {
+                    let room = dungeon.rooms.get(a1);
+                    if room.is_none() {
+                        false
+                    } else {
+                        room.unwrap()
+                            .door_connections
+                            .iter()
+                            .map(|x| x.1.clone())
+                            .map(|x| x)
+                            .flatten()
+                            .map(|d| (d.node_a_idx, d.node_b_idx))
+                            .any(|(a2, b2)| (*a1 == a2 && *b1 == b2) || (*a1 == b2 && *b1 == a2))
+                    }
+                })
+                .count()
+        };
+        dbg!(dungeon.rooms.len(), map_graph.nodes.len(),);
+        if dungeon.rooms.len() >= map_graph.nodes.len() - 1 && edges_satisfied == edges_count {
             break dungeon;
         }
-        // println!("-------------------");
-        // println!("regenerating map...");
+        println!("-------------------");
+        println!("regenerating map...");
     };
 
     let map_dir = "D:/Git/Aurora.3/maps/sccv_horizon".to_string();
@@ -171,7 +200,7 @@ pub fn generate_erebos() {
 
     for x in 0..dungeon_size {
         for y in 0..dungeon_size {
-            let ere_tile = dungeon.tiles[x * dungeon_size + y];
+            let ere_tile = dungeon.tiles[x + y * dungeon_size];
             let umm_tile = umm.grid.get_mut(x as usize, y as usize).unwrap();
             umm_tile.id = "aaa".into();
 

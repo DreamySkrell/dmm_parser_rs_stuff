@@ -9,6 +9,7 @@ mod door_fixing;
 mod flip;
 mod generate;
 mod remap_34;
+mod wfc;
 
 use itertools::Itertools;
 use linked_hash_map::LinkedHashMap;
@@ -19,6 +20,8 @@ fn main() {
     // remap_34::remap();
     // door_fixing::remap();
     // all_map_runner::remap();
-    generate::generate_dungen();
+    // generate::generate_dungen();
     generate::generate_erebos();
+    // wfc::generate_wfc_rs();
+    // wfc::generate_wfc_image();
 }

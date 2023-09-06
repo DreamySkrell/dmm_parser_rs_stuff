@@ -15,6 +15,10 @@ grid = "0.10"
 walkdir = "2"
 rand = "^0.8"
 petgraph = "0.6.0"
+wfc = "0.10.7"
+wfc_image = "0.12.1"
+image = "*"
+wfc-rs = "0.6.1"
 
 [build-dependencies]
 lalrpop = "0.19"
