@@ -5,7 +5,7 @@
 mod dungen;
 mod erebos;
 
-use std::ops::Deref;
+use std::{collections::HashMap, ops::Deref};
 
 use crate::dmmr::{self, pack, print, Atom, Prototype, Umm};
 use grid::Grid;
@@ -137,6 +137,15 @@ fn make_graph() -> erebos::graph::MapGraph {
         (13, 14),
         (14, 15),
         //
+        (5, 20),
+        (20, 21),
+        //
+        (2, 22),
+        (4, 23),
+        (9, 24),
+        (13, 25),
+        (17, 26),
+        (6, 27),
     ]);
     for (i, weight) in graph.node_weights_mut().enumerate() {
         *weight = i + 1;
@@ -147,6 +156,7 @@ fn make_graph() -> erebos::graph::MapGraph {
         graph,
         nodes,
         neighbour_map,
+        node_forced_room_ids: HashMap::from([(5, 42), (19, 43)]),
     }
 }
 

@@ -18,6 +18,7 @@ pub struct MapGraph {
   pub graph: StableGraph<usize, usize>,
   pub nodes: Vec<NodeIndex<u32>>,
   pub neighbour_map: NeighbourMap,
+  pub node_forced_room_ids: HashMap<usize, usize>,
 }
 
 pub fn random_graph() -> MapGraph {
@@ -87,6 +88,7 @@ pub fn random_graph() -> MapGraph {
     graph,
     nodes,
     neighbour_map,
+    node_forced_room_ids: HashMap::new(),
   }
 }
 

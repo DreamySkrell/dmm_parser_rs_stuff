@@ -20,6 +20,7 @@ pub fn try_node_recursive(
     graph,
     nodes,
     neighbour_map,
+    node_forced_room_ids,
   } = map_graph;
 
   // debug::print_map(map.tiles.clone(), map.width);
@@ -58,7 +59,8 @@ pub fn try_node_recursive(
   for (_, node_b, outbound) in &neighbours {
     let node_b_weight = weights.get(node_b.index()).unwrap();
     let room_b_type = if node_b_weight == weights.last().unwrap() {
-      RoomType::Boss
+      //RoomType::Boss
+      RoomType::Normal
     } else {
       RoomType::Normal
     };
@@ -80,7 +82,21 @@ pub fn try_node_recursive(
       // Prefer rooms that are designed to have minimum doors (eg: T shaped rooms = 3 minimum doors)
       let has_min_doors = room_b.template.min_doors <= (graph.edges(node_b.clone()).count() + 1) as u32;
       // Select Boss or Normal room based on node weight
-      let room_is_correct_type = room_b.template.room_type == room_b_type;
+      let room_is_correct_type = {
+        //
+        //(room_b.template.unique_id.is_none() || room_b.template.unique_id.unwrap() == node_b.index());
+        // if true {};
+        if let Some(node_forced_room_id) = node_forced_room_ids.get(&node_b.index()) {
+          if room_b.template.unique_id.is_none() {
+            false
+          } else {
+            let unique_id = room_b.template.unique_id.unwrap();
+            unique_id == *node_forced_room_id
+          }
+        } else {
+          room_b.template.room_type == room_b_type
+        }
+      };
 
       // Each room has a precalculated coordinates
       let mut room_combinations = if room_is_correct_type && has_min_doors {

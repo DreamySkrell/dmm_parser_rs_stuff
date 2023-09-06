@@ -12,6 +12,7 @@ pub struct RoomTemplate {
   pub room_type: RoomType,
   pub tiles: Vec<u8>,
   pub valid_combinations: HashMap<usize, Vec<RoomCombination>>,
+  pub unique_id: Option<usize>,
 }
 
 ///
@@ -39,6 +40,8 @@ impl RoomTemplates {
       definitions::small_square(),
       definitions::tall(),
       definitions::boss_room_2(),
+      definitions::middle_boss_room_2(),
+      definitions::end_room(),
       // definitions::wide(),
       //
       definitions::bent_l(),
