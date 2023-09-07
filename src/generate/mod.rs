@@ -2,8 +2,8 @@
 #![allow(unused_variables)]
 #![allow(unused_must_use)]
 
+mod cerberus;
 mod dungen;
-mod erebos;
 
 use std::{collections::HashMap, ops::Deref};
 
@@ -17,7 +17,7 @@ use petgraph::{
 use rand::{thread_rng, Rng};
 
 pub fn generate_dungen() {
-    let dungeon_size = 50;
+    let dungeon_size = 100;
     let mut dungeon = dungen::Dungeon::new(dungeon_size, dungeon_size);
     let max_features = 10;
     dungeon.generate(max_features);
@@ -113,7 +113,7 @@ pub fn generate_dungen() {
     std::fs::write(map_name, result_str).unwrap();
 }
 
-fn make_graph() -> erebos::graph::MapGraph {
+fn make_graph() -> cerberus::graph::MapGraph {
     let mut graph = StableGraph::from_edges([
         (0, 1),
         (1, 2),
@@ -155,8 +155,8 @@ fn make_graph() -> erebos::graph::MapGraph {
         *weight = i + 1;
     }
     let nodes: Vec<NodeIndex<u32>> = graph.node_indices().collect();
-    let neighbour_map = erebos::graph::create_neighbour_map((graph.clone(), nodes.clone()));
-    erebos::graph::MapGraph {
+    let neighbour_map = cerberus::graph::create_neighbour_map((graph.clone(), nodes.clone()));
+    cerberus::graph::MapGraph {
         graph,
         nodes,
         neighbour_map,
@@ -164,12 +164,13 @@ fn make_graph() -> erebos::graph::MapGraph {
     }
 }
 
-pub fn generate_erebos() {
+pub fn generate_cerberus() {
     let dungeon_size = 100;
-    // let map_graph = erebos::random_graph();
+    // let map_graph = cerberus::random_graph();
     let map_graph = make_graph();
     let mut dungeon = loop {
-        let dungeon = erebos::generate_map(&map_graph, (dungeon_size as i32, dungeon_size as i32));
+        let dungeon =
+            cerberus::generate_map(&map_graph, (dungeon_size as i32, dungeon_size as i32));
         let edges_count = map_graph.graph.edge_count();
         let edges_satisfied = {
             map_graph
@@ -203,7 +204,7 @@ pub fn generate_erebos() {
     };
 
     let map_dir = "D:/Git/Aurora.3/maps/sccv_horizon".to_string();
-    let map_name = map_dir + "/" + "dungeon_erebos" + ".dmm";
+    let map_name = map_dir + "/" + "dungeon_cerberus" + ".dmm";
 
     let mut umm = Umm {
         comment:

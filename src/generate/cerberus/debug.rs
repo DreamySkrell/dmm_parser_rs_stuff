@@ -1,4 +1,4 @@
-use crate::generate::erebos::map::room::DoorConnection;
+use crate::generate::cerberus::map::room::DoorConnection;
 
 use super::map::Map;
 use petgraph::{matrix_graph::NodeIndex, stable_graph::StableGraph};

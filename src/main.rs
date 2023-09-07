@@ -21,7 +21,7 @@ fn main() {
     // door_fixing::remap();
     // all_map_runner::remap();
     // generate::generate_dungen();
-    generate::generate_erebos();
+    generate::generate_cerberus();
     // wfc::generate_wfc_rs();
     // wfc::generate_wfc_image();
 }
