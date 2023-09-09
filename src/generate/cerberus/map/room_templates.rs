@@ -12,7 +12,10 @@ pub struct RoomTemplate {
   pub room_type: RoomType,
   pub tiles: Vec<u8>,
   pub valid_combinations: HashMap<usize, Vec<RoomCombination>>,
-  pub unique_id: Option<usize>,
+  /// Optional tag of this room template.
+  /// Can be shared with other room templates.
+  /// Used to force a node be specific room template(s).
+  pub tag: Option<usize>,
 }
 
 ///

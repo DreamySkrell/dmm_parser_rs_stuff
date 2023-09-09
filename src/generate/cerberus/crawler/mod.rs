@@ -87,10 +87,10 @@ pub fn try_node_recursive(
         //(room_b.template.unique_id.is_none() || room_b.template.unique_id.unwrap() == node_b.index());
         // if true {};
         if let Some(node_forced_room_id) = node_forced_room_ids.get(&node_b.index()) {
-          if room_b.template.unique_id.is_none() {
+          if room_b.template.tag.is_none() {
             false
           } else {
-            let unique_id = room_b.template.unique_id.unwrap();
+            let unique_id = room_b.template.tag.unwrap();
             unique_id == *node_forced_room_id
           }
         } else {

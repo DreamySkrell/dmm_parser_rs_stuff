@@ -606,7 +606,7 @@ pub fn middle_boss_room_2() -> RoomTemplate {
     tiles,
     possible_doors_xy: doors_xy,
     room_type: RoomType::Boss,
-    unique_id: Some(42),
+    tag: Some(42),
     ..Default::default()
   }
 }
@@ -645,7 +645,7 @@ pub fn end_room() -> RoomTemplate {
     tiles,
     possible_doors_xy: doors_xy,
     room_type: RoomType::Boss,
-    unique_id: Some(43),
+    tag: Some(43),
     ..Default::default()
   }
 }
