@@ -4,10 +4,10 @@ use std::collections::HashMap;
 
 #[derive(Default, Clone)]
 pub struct RoomTemplate {
-  /// The XY coords for each possible door
   pub h: i32,
   pub w: i32,
   pub min_doors: u32,
+  /// The XY coords for each possible door
   pub possible_doors_xy: DoorsXY,
   pub room_type: RoomType,
   pub tiles: Vec<u8>,
