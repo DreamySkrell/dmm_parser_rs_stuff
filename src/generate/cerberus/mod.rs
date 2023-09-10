@@ -1,3 +1,7 @@
+#![allow(dead_code)]
+#![allow(unused_imports)]
+#![allow(unstable_name_collisions)]
+
 mod common;
 pub mod crawler;
 pub mod debug;

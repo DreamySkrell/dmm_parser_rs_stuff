@@ -1,3 +1,7 @@
+#![allow(dead_code)]
+#![allow(unused_imports)]
+#![allow(unstable_name_collisions)]
+
 /*
 Simple, random dungeon generator written in Rust. Originally described by Mike Anderson at
 http://www.roguebasin.com/index.php?title=Dungeon-Building_Algorithm

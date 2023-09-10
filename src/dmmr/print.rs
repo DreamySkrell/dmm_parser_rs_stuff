@@ -1,8 +1,5 @@
 use super::*;
 use itertools::Itertools;
-use lalrpop_util::lalrpop_mod;
-use linked_hash_map::LinkedHashMap;
-use std::collections::HashMap;
 
 fn newline() -> &'static str {
     "\r\n"

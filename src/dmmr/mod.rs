@@ -7,7 +7,9 @@ pub mod print;
 pub mod test;
 
 use grid::Grid;
+use itertools::Itertools;
 use lexer::Token;
+use linked_hash_map::LinkedHashMap;
 
 // ----------------------------------------- types:
 
@@ -78,7 +80,7 @@ pub fn unpack(dmm: &Dmm) -> Umm {
         grid: Grid::new(dmm.rows.len(), dmm.rows.first().unwrap().tiles.len()),
     };
 
-    let mut prototypes = HashMap::<String, Prototype>::new();
+    let mut prototypes = std::collections::HashMap::<String, Prototype>::new();
 
     for prototype in &dmm.prototypes {
         prototypes.insert(prototype.id.clone(), prototype.clone());

@@ -33,7 +33,7 @@ impl ForbidPattern for Forbid {
 pub fn generate(
     output_size: Size,
     pattern_size: u32,
-    seed: u64,
+    _seed: u64,
     input_image: image::DynamicImage,
     // output_path: String,
     orientations: &'static [orientation::Orientation],
@@ -54,7 +54,7 @@ pub fn generate(
     let bottom_right_offset = pattern_size - (pattern_size / 2);
     let id_grid = image_patterns.id_grid();
 
-    let bottom_right_coord = Coord::new(
+    let _bottom_right_coord = Coord::new(
         input_size.width() as i32 - bottom_right_offset as i32,
         input_size.height() as i32 - bottom_right_offset as i32,
     );

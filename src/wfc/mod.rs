@@ -1,4 +1,6 @@
-#![allow(unused_variables)]
+#![allow(dead_code)]
+#![allow(unused_imports)]
+#![allow(unstable_name_collisions)]
 
 use std::{collections::HashMap, num::NonZeroU32};
 
