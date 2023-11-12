@@ -7,5 +7,6 @@ pub mod dmmr;
 mod door_fixing;
 mod flip;
 pub mod generate;
+pub mod noise_gradient;
 mod remap_34;
 mod wfc;
