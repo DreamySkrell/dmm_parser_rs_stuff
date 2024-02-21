@@ -3,6 +3,7 @@
 #![allow(unstable_name_collisions)]
 
 mod all_map_runner;
+pub mod autopipe;
 pub mod dmmr;
 mod door_fixing;
 mod flip;
