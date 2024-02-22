@@ -24,7 +24,14 @@ pub fn apply() {
     // let result_path: std::path::PathBuf = format!("{map_dir}/{map_name}_ou.dmm").into();
 
     let origin_map_str = std::fs::read_to_string(&origin_path).unwrap();
-    let parsed = parse(&origin_map_str);
+
+    let result_str = autopipe(origin_map_str);
+
+    std::fs::write(result_path, result_str).unwrap();
+}
+
+pub fn autopipe(origin_str: String) -> String {
+    let parsed = parse(&origin_str);
 
     // let parsed_str = print(&parsed);
     // std::fs::write(parsed_path, parsed_str.clone()).unwrap();
@@ -246,5 +253,5 @@ pub fn apply() {
 
     print!("autopiped: {}", autopiped);
 
-    std::fs::write(result_path, result_str).unwrap();
+    result_str
 }

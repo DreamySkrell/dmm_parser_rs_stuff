@@ -11,3 +11,9 @@ extern "C" {
 pub fn greet() {
     alert("Hello, wasmtool!");
 }
+
+#[wasm_bindgen]
+pub fn autopipe(origin_str: String) -> String {
+    let result_str = dmm_parser_rs::autopipe::autopipe(origin_str);
+    result_str
+}
