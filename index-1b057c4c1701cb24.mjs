@@ -1,4 +1,4 @@
-import * as wasm from "wasmtool";
+// import * as wasm from "wasmtool";
 import {
   fileOpen,
   directoryOpen,
