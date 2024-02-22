@@ -4,6 +4,7 @@ on: [push, pull_request]
 jobs:
   release:
     runs-on: ubuntu-latest
+    environment: pages_env
     defaults:
       run:
         working-directory: ./wasmtool
@@ -24,4 +25,4 @@ jobs:
         if: github.ref == 'refs/heads/main'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./wasmtool/dist
+          publish_dir: wasmtool/dist
