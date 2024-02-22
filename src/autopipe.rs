@@ -7,7 +7,6 @@ use crate::*;
 
 use grid::Grid;
 use itertools::Itertools;
-use simdnoise::NoiseBuilder;
 
 pub fn apply() {
     // D:\Git\Aurora.3\maps\ganymede.dmm
@@ -245,7 +244,7 @@ pub fn apply() {
 
     let result_str = print(&repacked);
 
-    std::fs::write(result_path, result_str).unwrap();
-
     print!("autopiped: {}", autopiped);
+
+    std::fs::write(result_path, result_str).unwrap();
 }
