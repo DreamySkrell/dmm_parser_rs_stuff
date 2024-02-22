@@ -4,6 +4,9 @@ on: [push, pull_request]
 jobs:
   release:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./wasmtool
     steps:
       - uses: actions-rs/toolchain@v1
         with:
