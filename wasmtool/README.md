@@ -1,3 +1,13 @@
+
+
+
+`clear; wasm-pack build && npm run start`
+
+
+
+
+---------------
+
 <div align="center">
 
   <h1><code>wasm-pack-template</code></h1>
