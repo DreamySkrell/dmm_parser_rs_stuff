@@ -10,11 +10,19 @@ use itertools::Itertools;
 use simdnoise::NoiseBuilder;
 
 pub fn apply() {
+    // D:\Git\Aurora.3\maps\ganymede.dmm
     let map_dir = "D:/Git/Aurora.3/maps".to_string();
-    let map_name = "autopipe";
-    let origin_path: std::path::PathBuf = format!("{map_dir}/{map_name}_in.dmm").into();
-    let parsed_path: std::path::PathBuf = format!("{map_dir}/{map_name}_pp.dmm").into();
-    let result_path: std::path::PathBuf = format!("{map_dir}/{map_name}_ou.dmm").into();
+    let map_name = "ganymede";
+    let origin_path: std::path::PathBuf = format!("{map_dir}/{map_name}.dmm").into();
+    let parsed_path: std::path::PathBuf = format!("{map_dir}/{map_name}.dmm").into();
+    let result_path: std::path::PathBuf = format!("{map_dir}/{map_name}.dmm").into();
+
+    // D:\Git\Aurora.3\maps\autopipe_in.dmm
+    // let map_dir = "D:/Git/Aurora.3/maps".to_string();
+    // let map_name = "autopipe";
+    // let origin_path: std::path::PathBuf = format!("{map_dir}/{map_name}_in.dmm").into();
+    // let parsed_path: std::path::PathBuf = format!("{map_dir}/{map_name}_pp.dmm").into();
+    // let result_path: std::path::PathBuf = format!("{map_dir}/{map_name}_ou.dmm").into();
 
     let origin_map_str = std::fs::read_to_string(&origin_path).unwrap();
     let parsed = parse(&origin_map_str);
@@ -27,12 +35,22 @@ pub fn apply() {
     let rows = umm.grid.rows();
     let cols = umm.grid.cols();
 
-    let autopipe_config = [(
-        "/obj/machinery/atmospherics/pipe/simple/hidden/supply",
-        "/obj/machinery/atmospherics/pipe/manifold/hidden/supply",
-        "/obj/machinery/atmospherics/pipe/manifold4w/hidden/supply",
-        "/obj/machinery/atmospherics/unary/vent_pump/on",
-    )];
+    let autopipe_config = [
+        (
+            "/obj/machinery/atmospherics/pipe/simple/hidden/supply",
+            "/obj/machinery/atmospherics/pipe/manifold/hidden/supply",
+            "/obj/machinery/atmospherics/pipe/manifold4w/hidden/supply",
+            "/obj/machinery/atmospherics/unary/vent_pump/on",
+        ),
+        (
+            "/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers",
+            "/obj/machinery/atmospherics/pipe/manifold/hidden/scrubbers",
+            "/obj/machinery/atmospherics/pipe/manifold4w/hidden/scrubbers",
+            "/obj/machinery/atmospherics/unary/vent_scrubber/on",
+        ),
+    ];
+
+    let mut autopiped = 0;
 
     for row in 0..rows {
         for col in 0..cols {
@@ -49,7 +67,9 @@ pub fn apply() {
                 let get_gipe_from_atoms = |atoms: &Vec<Atom>| {
                     atoms
                         .iter()
-                        .find_or_first(|a| a.path == pipe)
+                        .find_or_first(|a| {
+                            a.path == pipe || a.path == mani3w || a.path == mani4w || a.path == vent
+                        })
                         .map(|a| {
                             (
                                 a.path.clone(),
@@ -59,7 +79,7 @@ pub fn apply() {
                                         if let VarVal::Int(dir) = dir {
                                             *dir as i32
                                         } else {
-                                            4
+                                            2
                                         }
                                     })
                                     .unwrap_or(2),
@@ -138,6 +158,8 @@ pub fn apply() {
                             continue;
                         }
 
+                        autopiped += 1;
+
                         // pipe straight
                         if connects_to_n && connects_to_s && !connects_to_e && !connects_to_w {
                             atom.path = pipe.to_string();
@@ -206,6 +228,8 @@ pub fn apply() {
                             atom.vars.insert("dir".to_string(), dmmr::VarVal::Int(8f64));
                             continue;
                         }
+
+                        autopiped -= 1;
                     }
                 }
             }
@@ -222,4 +246,6 @@ pub fn apply() {
     let result_str = print(&repacked);
 
     std::fs::write(result_path, result_str).unwrap();
+
+    print!("autopiped: {}", autopiped);
 }
