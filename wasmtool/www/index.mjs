@@ -1,10 +1,10 @@
-import * as wasm from "wasmtool";
+// import * as wasm from "wasmtool";
 import {
   fileOpen,
   directoryOpen,
   fileSave,
   supported,
-} from "browser-fs-access";
+} from "https://cdn.jsdelivr.net/npm/browser-fs-access@0.35.0/+esm";
 
 // async function getFile() {
 //   // Open file picker and destructure the result the first handle
