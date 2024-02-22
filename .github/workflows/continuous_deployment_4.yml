@@ -4,6 +4,7 @@ on: [push, pull_request]
 jobs:
   release:
     runs-on: ubuntu-latest
+    environment: pages_env
     defaults:
       run:
         working-directory: ./wasmtool
