@@ -95,7 +95,7 @@ pub fn apply() {
                         true
                     } else if s_path == mani3w && any_eq(&[2, 4, 8], s_dir) {
                         true
-                    } else if s_path == vent && any_eq(&[1], n_dir) {
+                    } else if s_path == vent && any_eq(&[1], s_dir) {
                         true
                     } else {
                         false
@@ -108,7 +108,7 @@ pub fn apply() {
                         true
                     } else if e_path == mani3w && any_eq(&[1, 2, 4], e_dir) {
                         true
-                    } else if e_path == vent && any_eq(&[8], n_dir) {
+                    } else if e_path == vent && any_eq(&[8], e_dir) {
                         true
                     } else {
                         false
@@ -121,7 +121,7 @@ pub fn apply() {
                         true
                     } else if w_path == mani3w && any_eq(&[1, 2, 8], w_dir) {
                         true
-                    } else if w_path == vent && any_eq(&[4], n_dir) {
+                    } else if w_path == vent && any_eq(&[4], w_dir) {
                         true
                     } else {
                         false
@@ -138,7 +138,7 @@ pub fn apply() {
                             continue;
                         }
 
-                        // pipe
+                        // pipe straight
                         if connects_to_n && connects_to_s && !connects_to_e && !connects_to_w {
                             atom.path = pipe.to_string();
                             atom.vars.insert("dir".to_string(), dmmr::VarVal::Int(2f64));
@@ -159,6 +159,29 @@ pub fn apply() {
                         if !connects_to_n && !connects_to_s && (connects_to_e ^ connects_to_w) {
                             atom.path = pipe.to_string();
                             atom.vars.insert("dir".to_string(), dmmr::VarVal::Int(4f64));
+                            continue;
+                        }
+
+                        // pipe turn
+                        if connects_to_n && !connects_to_s && connects_to_e && !connects_to_w {
+                            atom.path = pipe.to_string();
+                            atom.vars.insert("dir".to_string(), dmmr::VarVal::Int(5f64));
+                            continue;
+                        }
+                        if !connects_to_n && connects_to_s && !connects_to_e && connects_to_w {
+                            atom.path = pipe.to_string();
+                            atom.vars
+                                .insert("dir".to_string(), dmmr::VarVal::Int(10f64));
+                            continue;
+                        }
+                        if connects_to_n && !connects_to_s && !connects_to_e && connects_to_w {
+                            atom.path = pipe.to_string();
+                            atom.vars.insert("dir".to_string(), dmmr::VarVal::Int(9f64));
+                            continue;
+                        }
+                        if !connects_to_n && connects_to_s && connects_to_e && !connects_to_w {
+                            atom.path = pipe.to_string();
+                            atom.vars.insert("dir".to_string(), dmmr::VarVal::Int(6f64));
                             continue;
                         }
 
