@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./wasmtool/www
+        working-directory: ./wasmtool
     steps:
       - uses: actions-rs/toolchain@v1
         with:
