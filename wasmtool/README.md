@@ -3,6 +3,7 @@
 
 `clear; wasm-pack build && npm run start`
 
+`clear; trunk build && trunk serve`
 
 
 
