@@ -24,19 +24,16 @@ pub fn apply() {
     // let result_path: std::path::PathBuf = format!("{map_dir}/{map_name}_ou.dmm").into();
 
     let origin_map_str = std::fs::read_to_string(&origin_path).unwrap();
-
-    let result_str = autopipe(origin_map_str);
-
+    let parsed = parse(&origin_map_str);
+    let umm = unpack(&parsed);
+    let umm = autopipe(umm);
+    let repacked = pack(&umm);
+    let result_str = print(&repacked);
     std::fs::write(result_path, result_str).unwrap();
 }
 
-pub fn autopipe(origin_str: String) -> String {
-    let parsed = parse(&origin_str);
-
-    // let parsed_str = print(&parsed);
-    // std::fs::write(parsed_path, parsed_str.clone()).unwrap();
-
-    let mut umm = unpack(&parsed);
+pub fn autopipe(mut umm: Umm) -> Umm {
+    let _ = crate::util::ModuleHelper::new("autopipe");
 
     let rows = umm.grid.rows();
     let cols = umm.grid.cols();
@@ -247,11 +244,8 @@ pub fn autopipe(origin_str: String) -> String {
             x.id = format!("a{}", x.id);
         }
     }
-    let repacked = pack(&umm);
 
-    let result_str = print(&repacked);
+    log::info!("autopiped: {}", autopiped);
 
-    print!("autopiped: {}", autopiped);
-
-    result_str
+    umm
 }

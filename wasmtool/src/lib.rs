@@ -38,6 +38,10 @@ pub fn set_up_logging() {
 
 #[wasm_bindgen]
 pub fn autopipe(origin_str: String) -> String {
-    let result_str = dmm_parser_rs::autopipe::autopipe(origin_str);
+    let parsed = dmm_parser_rs::dmmr::parse(&origin_str);
+    let umm = dmm_parser_rs::dmmr::unpack(&parsed);
+    let umm = dmm_parser_rs::autopipe::autopipe(umm);
+    let repacked = dmm_parser_rs::dmmr::pack(&umm);
+    let result_str = dmm_parser_rs::dmmr::print(&repacked);
     result_str
 }

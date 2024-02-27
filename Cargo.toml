@@ -23,6 +23,7 @@ image = "*"
 getrandom = { features = ["js"] }
 log = "0.4.20"
 fern = "0.6.2"
+instant = "0.1.12"
 
 [build-dependencies]
 lalrpop = "0.19"
