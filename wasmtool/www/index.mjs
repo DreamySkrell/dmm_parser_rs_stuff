@@ -55,9 +55,13 @@ async function getFile() {
   return await blob.text();
 }
 
+wasm.set_up_logging();
+
 async function onClick() {
   // wasm.greet();
   let x = await getFile();
+
+  document.getElementById("file-name").innerText = x.fileName;
 
   console.log("autopiping...");
   let y = wasm.autopipe(x);

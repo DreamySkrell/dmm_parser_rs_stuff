@@ -8,8 +8,32 @@ extern "C" {
 }
 
 #[wasm_bindgen]
-pub fn greet() {
-    alert("Hello, wasmtool!");
+pub fn set_up_logging() {
+    fern::Dispatch::new()
+        // Perform allocation-free log formatting
+        .format(|out, message, record| {
+            out.finish(format_args!(
+                "[{} {}] {}",
+                chrono::Local::now().format("%H:%M:%S.%3f"),
+                record.level(),
+                message
+            ))
+        })
+        .level(log::LevelFilter::Debug)
+        .chain(std::io::stdout())
+        .chain(fern::Output::call(|record| {
+            web_sys::window()
+                .unwrap()
+                .document()
+                .unwrap()
+                .get_element_by_id("logs")
+                .unwrap()
+                .append_with_str_1(&format!("{}\n", record.args()))
+                .unwrap();
+        }))
+        .apply()
+        .unwrap();
+    log::info!("logging initialized");
 }
 
 #[wasm_bindgen]
