@@ -38,18 +38,38 @@ pub fn autopipe(mut umm: Umm) -> Umm {
     let rows = umm.grid.rows();
     let cols = umm.grid.cols();
 
-    let autopipe_config = [
+    let autopipe_config: [(&str, &str, &str, &[&str]); 4] = [
         (
             "/obj/machinery/atmospherics/pipe/simple/hidden/supply",
             "/obj/machinery/atmospherics/pipe/manifold/hidden/supply",
             "/obj/machinery/atmospherics/pipe/manifold4w/hidden/supply",
-            "/obj/machinery/atmospherics/unary/vent_pump/on",
+            &["/obj/machinery/atmospherics/unary/vent_pump/on"],
         ),
         (
             "/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers",
             "/obj/machinery/atmospherics/pipe/manifold/hidden/scrubbers",
             "/obj/machinery/atmospherics/pipe/manifold4w/hidden/scrubbers",
-            "/obj/machinery/atmospherics/unary/vent_scrubber/on",
+            &["/obj/machinery/atmospherics/unary/vent_scrubber/on"],
+        ),
+        (
+            "/obj/machinery/atmospherics/pipe/simple/hidden/aux",
+            "/obj/machinery/atmospherics/pipe/manifold/hidden/aux",
+            "/obj/machinery/atmospherics/pipe/manifold4w/hidden/aux",
+            &[
+                "/obj/machinery/atmospherics/unary/vent_pump/high_volume/aux",
+                "/obj/machinery/atmospherics/portables_connector/aux",
+            ],
+        ),
+        (
+            "/obj/machinery/atmospherics/pipe/simple/hidden/fuel",
+            "/obj/machinery/atmospherics/pipe/manifold/hidden/fuel",
+            "/obj/machinery/atmospherics/pipe/manifold4w/hidden/fuel",
+            &[
+                "/obj/machinery/atmospherics/portables_connector/fuel",
+                "/obj/machinery/atmospherics/unary/engine",
+                "/obj/machinery/atmospherics/pipe/tank/carbon_dioxide",
+                "/obj/machinery/atmospherics/pipe/tank/carbon_dioxide/scc_shuttle",
+            ],
         ),
     ];
 
@@ -61,17 +81,22 @@ pub fn autopipe(mut umm: Umm) -> Umm {
                 continue;
             }
 
-            for (pipe, mani3w, mani4w, vent) in autopipe_config {
+            for (pipe, mani3w, mani4w, other) in autopipe_config {
                 let atoms_n = umm.grid.get(row, col - 1).unwrap().atoms.clone();
                 let atoms_s = umm.grid.get(row, col + 1).unwrap().atoms.clone();
                 let atoms_e = umm.grid.get(row + 1, col).unwrap().atoms.clone();
                 let atoms_w = umm.grid.get(row - 1, col).unwrap().atoms.clone();
 
+                let any_eq_p = |l: &[&str], e: &str| l.iter().any(|t| *t == e);
+
                 let get_gipe_from_atoms = |atoms: &Vec<Atom>| {
                     atoms
                         .iter()
                         .find_or_first(|a| {
-                            a.path == pipe || a.path == mani3w || a.path == mani4w || a.path == vent
+                            a.path == pipe
+                                || a.path == mani3w
+                                || a.path == mani4w
+                                || any_eq_p(&other, &a.path)
                         })
                         .map(|a| {
                             (
@@ -105,7 +130,7 @@ pub fn autopipe(mut umm: Umm) -> Umm {
                         true
                     } else if n_path == mani3w && any_eq(&[1, 4, 8], n_dir) {
                         true
-                    } else if n_path == vent && any_eq(&[2], n_dir) {
+                    } else if any_eq_p(&other, &n_path) && any_eq(&[2], n_dir) {
                         true
                     } else {
                         false
@@ -118,7 +143,7 @@ pub fn autopipe(mut umm: Umm) -> Umm {
                         true
                     } else if s_path == mani3w && any_eq(&[2, 4, 8], s_dir) {
                         true
-                    } else if s_path == vent && any_eq(&[1], s_dir) {
+                    } else if any_eq_p(&other, &s_path) && any_eq(&[1], s_dir) {
                         true
                     } else {
                         false
@@ -131,7 +156,7 @@ pub fn autopipe(mut umm: Umm) -> Umm {
                         true
                     } else if e_path == mani3w && any_eq(&[1, 2, 4], e_dir) {
                         true
-                    } else if e_path == vent && any_eq(&[8], e_dir) {
+                    } else if any_eq_p(&other, &e_path) && any_eq(&[8], e_dir) {
                         true
                     } else {
                         false
@@ -144,7 +169,7 @@ pub fn autopipe(mut umm: Umm) -> Umm {
                         true
                     } else if w_path == mani3w && any_eq(&[1, 2, 8], w_dir) {
                         true
-                    } else if w_path == vent && any_eq(&[4], w_dir) {
+                    } else if any_eq_p(&other, &w_path) && any_eq(&[4], w_dir) {
                         true
                     } else {
                         false
