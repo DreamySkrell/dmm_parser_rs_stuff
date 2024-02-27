@@ -1,17 +1,14 @@
 use std::time::SystemTime;
 
 pub struct ModuleHelper {
-    start_time: std::time::Duration,
+    start_time: instant::Instant,
     name: String,
 }
 
 impl ModuleHelper {
     pub fn new(name: &str) -> Self {
         log::info!("{}; start...;", name);
-        let start_time = SystemTime::now()
-            .duration_since(std::time::UNIX_EPOCH)
-            .unwrap();
-        log::info!("{}; start2...;", name);
+        let start_time = instant::Instant::now();
         ModuleHelper {
             start_time,
             name: name.to_string(),
@@ -21,9 +18,7 @@ impl ModuleHelper {
 
 impl Drop for ModuleHelper {
     fn drop(&mut self) {
-        let end_time = SystemTime::now()
-            .duration_since(std::time::UNIX_EPOCH)
-            .unwrap();
+        let end_time = instant::Instant::now();
         let duration = end_time - self.start_time;
 
         log::info!(
